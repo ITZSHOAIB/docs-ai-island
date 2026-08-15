@@ -114,6 +114,8 @@ const resources = [
 
 Resource values may be literals or functions of current Page Context. URL clipboard values serialize to `href`; `openUrl()` accepts only HTTP(S) destinations.
 
+Async Actions are scoped to one active operation. Starting another Action, updating the controller after navigation, or destroying it aborts pending content work and suppresses stale clipboard, announcement, and event effects. Lifecycle events identify the Action but never include copied content.
+
 ## VitePress
 
 The repository includes a production-built VitePress 1.6 fixture that uses the public package API. Extend the default theme, mount the island from the `layout-bottom` slot, and keep the controller alive across client-side navigation:

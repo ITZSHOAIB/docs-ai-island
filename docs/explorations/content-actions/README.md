@@ -1,6 +1,6 @@
 # Content and built-in Actions exploration
 
-Status: active; contract approved and Phases 1–4 complete
+Status: active; contract approved and Phases 1–5 complete
 
 Prepared: 2026-08-15
 
@@ -66,7 +66,7 @@ The browser clipboard is an asynchronous secure-context boundary and may reject 
 | 2 | [`02-markdown-source.md`](./02-markdown-source.md) | Complete: URL source, failure, and explicit fallback work |
 | 3 | [`03-view-markdown.md`](./03-view-markdown.md) | Complete: explicit viewable sources open from current Page Context |
 | 4 | [`04-resource-actions.md`](./04-resource-actions.md) | Complete: generic copy/open resource factories work |
-| 5 | [`05-lifecycle-and-safety.md`](./05-lifecycle-and-safety.md) | Denial, cancellation, privacy, and cleanup are reliable |
+| 5 | [`05-lifecycle-and-safety.md`](./05-lifecycle-and-safety.md) | Complete: denial, cancellation, privacy, and cleanup are reliable |
 | 6 | [`06-vitepress-proof.md`](./06-vitepress-proof.md) | Packed VitePress consumer exercises real Markdown actions |
 
 Each phase uses vertical TDD: one public behavior test fails, the smallest implementation makes it pass, then the next test is written. No phase begins with a bulk test suite.

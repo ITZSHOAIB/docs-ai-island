@@ -35,10 +35,12 @@ export function copyPage(options: DocsAiCopyPageOptions): DocsAiIslandAction {
       try {
         content = await options.source.read({ page, signal });
       } catch (error) {
+        if (signal.aborted) throw error;
         if (options.fallback !== "copy-url") throw error;
         await clipboard.writeText(page.canonicalUrl.href);
         return "Page link copied";
       }
+      signal.throwIfAborted();
       await clipboard.writeText(content.value);
       return content.kind === "markdown" ? "Markdown copied" : "Page content copied";
     },

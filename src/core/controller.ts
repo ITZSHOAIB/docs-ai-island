@@ -18,6 +18,11 @@ type ActionEntry = {
 };
 
 type CloseOptions = { readonly restoreFocus?: boolean };
+type ActionOperation = {
+  readonly actionId: string;
+  readonly abortController: AbortController;
+  readonly button?: HTMLButtonElement;
+};
 
 const controllers = new WeakMap<Element, DocsAiIslandController>();
 let islandId = 0;
@@ -112,7 +117,7 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
   root.setAttribute("dir", "auto");
   let state: IslandState = config.initialOpen ? { status: "open" } : initialState;
   let destroyed = false;
-  let actionAbortController: AbortController | undefined;
+  let activeAction: ActionOperation | undefined;
   let actionRegistry = new Map<string, ActionEntry>();
   let trigger: HTMLButtonElement;
   let menu: HTMLElement;
@@ -122,8 +127,9 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
 
   function announce(message: string): void {
     liveRegion.textContent = "";
+    const target = liveRegion;
     ownerDocument.defaultView?.requestAnimationFrame(() => {
-      if (!destroyed) liveRegion.textContent = message;
+      if (!destroyed && target === liveRegion && target.isConnected) target.textContent = message;
     });
   }
 
@@ -259,16 +265,37 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     emit(config, { type: "close" });
   }
 
+  function finishAction(operation: ActionOperation): void {
+    if (activeAction !== operation) return;
+    activeAction = undefined;
+    state = transition(state, { type: "action-end", actionId: operation.actionId });
+    operation.button?.removeAttribute("aria-busy");
+    if (root.dataset.actionStatus !== "error") delete root.dataset.actionStatus;
+  }
+
+  function abortActiveAction(): void {
+    const operation = activeAction;
+    if (!operation) return;
+    operation.abortController.abort();
+    delete root.dataset.actionStatus;
+    finishAction(operation);
+  }
+
   async function runAction(actionId: string): Promise<void> {
     const entry = actionRegistry.get(actionId);
     if (!entry || entry.action.disabled) return;
 
-    actionAbortController?.abort();
-    actionAbortController = new AbortController();
+    abortActiveAction();
     const { action, group } = entry;
     const button = root.querySelector<HTMLButtonElement>(
       `[data-action-id="${CSS.escape(action.id)}"]`,
     );
+    const operation: ActionOperation = {
+      actionId,
+      abortController: new AbortController(),
+      ...(button === null ? {} : { button }),
+    };
+    activeAction = operation;
     state = transition(state, { type: "action-start", actionId });
     button?.setAttribute("aria-busy", "true");
     root.dataset.actionStatus = "pending";
@@ -278,7 +305,7 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     const page = resolvePageContext(ownerDocument, config.pageTitle);
     const context: DocsAiIslandActionContext = {
       page,
-      signal: actionAbortController.signal,
+      signal: operation.abortController.signal,
       element: root,
       clipboard: {
         writeText(value) {
@@ -293,21 +320,17 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
 
     try {
       const result = await action.onSelect(context);
-      if (actionAbortController.signal.aborted || destroyed) return;
+      if (operation.abortController.signal.aborted || destroyed) return;
       announce(result || config.messages.actionSucceeded(action.label));
       emit(config, { type: "action-success", actionId });
       if (action.closeOnSelect ?? group.kind !== "utility") close();
     } catch (error) {
-      if (actionAbortController.signal.aborted || destroyed) return;
+      if (operation.abortController.signal.aborted || destroyed) return;
       root.dataset.actionStatus = "error";
       announce(config.messages.actionFailed(action.label));
       emit(config, { type: "action-error", actionId, error });
     } finally {
-      if (!destroyed) {
-        state = transition(state, { type: "action-end", actionId });
-        button?.removeAttribute("aria-busy");
-        if (root.dataset.actionStatus !== "error") delete root.dataset.actionStatus;
-      }
+      if (!destroyed) finishAction(operation);
     }
   }
 
@@ -367,6 +390,8 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     close: () => close(),
     update(update) {
       if (destroyed) return;
+      abortActiveAction();
+      delete root.dataset.actionStatus;
       sourceConfig = mergeConfig(sourceConfig, update);
       config = normalizeConfig(sourceConfig);
       const nextContainer = resolveContainer(ownerDocument, config.container);
@@ -382,7 +407,7 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     destroy() {
       if (destroyed) return;
       destroyed = true;
-      actionAbortController?.abort();
+      abortActiveAction();
       listeners.abort();
       controllers.delete(container);
       root.remove();

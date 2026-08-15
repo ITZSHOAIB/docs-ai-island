@@ -7,6 +7,9 @@ test.beforeEach(async ({ page }) => {
       configurable: true,
       value: {
         writeText(value: string) {
+          if (new URLSearchParams(location.search).has("clipboard-denied")) {
+            return Promise.reject(new DOMException("Write permission denied", "NotAllowedError"));
+          }
           document.documentElement.dataset.fixtureClipboard = value;
           return Promise.resolve();
         },
@@ -267,6 +270,106 @@ test("preserves ordinary Action customization on URL resources", async ({ page }
     "https://github.com/ITZSHOAIB/docs-ai-island",
   );
   await expect(island).toHaveAttribute("data-state", "open");
+});
+
+test("announces clipboard denial once without exposing content in events", async ({ page }) => {
+  await page.goto("/?clipboard-denied");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(island.locator('[data-part="live-region"]')).toHaveText(
+    "Could not complete Copy page for AI",
+  );
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-event-count", "1");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-event-payload",
+    /"type":"action-error".*"actionId":"copy-page"/,
+  );
+  await expect(page.locator("html")).not.toHaveAttribute(
+    "data-fixture-event-payload",
+    /Keep \*\*formatting\*\*/,
+  );
+});
+
+test("a newer Action aborts stale content and owns later effects", async ({ page }) => {
+  await page.goto("/?delayed-content&copy-url-fallback");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+  await island.getByRole("button", { name: "MCP" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-source-aborted", "true");
+  await page.waitForTimeout(250);
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "https://docs.luma.dev/api/mcp",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("MCP copied");
+});
+
+test("controller updates abort pending content and suppress late effects", async ({ page }) => {
+  await page.goto("/?delayed-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+  await page.evaluate(() => window.dispatchEvent(new Event("fixture:update")));
+
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-source-aborted", "true");
+  await page.waitForTimeout(250);
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("");
+});
+
+test("controller destruction aborts pending content and suppresses late effects", async ({
+  page,
+}) => {
+  await page.goto("/?delayed-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+  await page.evaluate(() => window.dispatchEvent(new Event("fixture:destroy")));
+
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-source-aborted", "true");
+  await page.waitForTimeout(250);
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(island).toHaveCount(0);
+});
+
+test("success events identify the Action without exposing copied text", async ({ page }) => {
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-outcome-payload",
+    '{"type":"action-success","actionId":"copy-page"}',
+  );
+  await expect(page.locator("html")).not.toHaveAttribute(
+    "data-fixture-outcome-payload",
+    /Keep \*\*formatting\*\*/,
+  );
+});
+
+test("throwing consumer event callbacks cannot break Action cleanup", async ({ page }) => {
+  await page.goto("/?throwing-callback");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  const action = island.getByRole("button", { name: "Copy page for AI" });
+  await action.click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "# Exact source\n\nKeep **formatting**.",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("Markdown copied");
+  await expect(action).not.toHaveAttribute("aria-busy", "true");
+  await expect(island).not.toHaveAttribute("data-action-status");
 });
 
 test("has no automatically detectable accessibility violations", async ({ page }) => {

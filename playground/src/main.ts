@@ -46,12 +46,28 @@ const remoteContent = markdownSource({
 const contextualRemoteContent = markdownSource({
   url: (page) => new URL(`/content${page.canonicalUrl.pathname}.md`, page.canonicalUrl),
 });
+const delayedContent = defineContentSource({
+  read({ signal }) {
+    signal.addEventListener(
+      "abort",
+      () => {
+        document.documentElement.dataset.fixtureSourceAborted = "true";
+      },
+      { once: true },
+    );
+    return new Promise<{ kind: "markdown"; value: string }>((resolve) => {
+      window.setTimeout(() => resolve({ kind: "markdown", value: "# Stale delayed content" }), 150);
+    });
+  },
+});
 const fixtureOptions = new URLSearchParams(window.location.search);
-const pageContent = fixtureOptions.has("contextual-content")
-  ? contextualRemoteContent
-  : fixtureOptions.has("remote-content")
-    ? remoteContent
-    : inlineContent;
+const pageContent = fixtureOptions.has("delayed-content")
+  ? delayedContent
+  : fixtureOptions.has("contextual-content")
+    ? contextualRemoteContent
+    : fixtureOptions.has("remote-content")
+      ? remoteContent
+      : inlineContent;
 
 const markdown: DocsAiIslandAction = {
   id: "markdown",
@@ -81,6 +97,9 @@ const mcp = copyResource({
 
 const config = defineConfig({
   pageTitle: "Create your first client",
+  ...(fixtureOptions.has("clipboard-denied")
+    ? { messages: { actionFailed: (label: string) => `Could not complete ${label}` } }
+    : {}),
   groups: [
     {
       id: "targets",
@@ -128,14 +147,37 @@ const config = defineConfig({
       : []),
   ],
   onEvent(event) {
+    if (event.type === "action-success" || event.type === "action-error") {
+      document.documentElement.dataset.fixtureOutcomePayload = JSON.stringify(
+        event,
+        (_key, value) =>
+          value instanceof Error ? { name: value.name, message: value.message } : value,
+      );
+    }
     if (event.type === "action-error") {
       document.documentElement.dataset.fixtureEvent = event.type;
+      document.documentElement.dataset.fixtureEventCount = String(
+        Number(document.documentElement.dataset.fixtureEventCount ?? 0) + 1,
+      );
+      document.documentElement.dataset.fixtureEventPayload = JSON.stringify(event, (_key, value) =>
+        value instanceof Error ? { name: value.name, message: value.message } : value,
+      );
       showToast("That action is unavailable in this preview");
+    }
+    if (fixtureOptions.has("throwing-callback")) {
+      throw new Error("Fixture analytics failure");
     }
   },
 });
 
 const controller = mountDocsAiIsland(config);
+
+window.addEventListener("fixture:update", () => {
+  controller.update({ pageTitle: "Updated fixture page" });
+});
+window.addEventListener("fixture:destroy", () => {
+  controller.destroy();
+});
 
 document.querySelectorAll<HTMLSelectElement>("[data-control]").forEach((select) => {
   select.addEventListener("change", () => {

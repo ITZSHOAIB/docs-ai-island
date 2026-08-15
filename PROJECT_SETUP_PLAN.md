@@ -539,7 +539,7 @@ Exit: every documented token/part has a test; no production CSS relies on the pr
 - Add context resolution, visibility, ChatGPT/Claude targets, clipboard Actions, resource Actions, events, validation, and privacy safeguards.
 - Keep content lazy and test target URL contracts.
 
-Current checkpoint: [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) defines the vertical RED→GREEN slices. ADR 0003 is accepted. Phases 1–4 implement explicit custom/URL Content Sources, lazy `copyPage()`, explicit failure/fallback, safe `viewMarkdown()` navigation, and generic copy/open resource Actions from current Page Context; subsequent phases add lifecycle hardening and the packed-consumer proof.
+Current checkpoint: [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) defines the vertical RED→GREEN slices. ADR 0003 is accepted. Phases 1–5 implement explicit custom/URL Content Sources, lazy copy/view/resource Actions, explicit failure/fallback, current Page Context, operation-scoped cancellation, cleanup, and event privacy; the remaining phase adds the packed-consumer proof.
 
 Exit: the package is useful with zero configuration and remains network-idle until a user acts.
 

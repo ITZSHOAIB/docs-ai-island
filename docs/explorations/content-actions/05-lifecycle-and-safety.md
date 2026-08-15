@@ -1,5 +1,7 @@
 # Phase 5: lifecycle and safety
 
+Status: complete
+
 ## Risks
 
 - Clipboard writes can be unavailable or denied.
@@ -22,3 +24,7 @@ Only after all lifecycle tests are GREEN, consolidate Action execution around on
 ## Exit gate
 
 Every asynchronous result belongs to the active Action and Page Context, failure feedback is accurate, and no content appears in lifecycle events.
+
+## Result
+
+Clipboard denial produces localized failure and one content-free error event. One active-operation object owns its abort controller, button, page snapshot, and completion guard. A newer Action, controller update, or destroy aborts prior work; stale reads cannot write clipboard content, use URL fallback, announce, or emit outcomes. Consumer event callbacks remain isolated from Action cleanup.
