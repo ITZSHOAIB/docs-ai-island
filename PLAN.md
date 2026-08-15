@@ -36,6 +36,8 @@ Publishing is intentionally disabled during development. CI validates pushes to 
 
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
+The next implementation epic is currently at its TDD approval checkpoint. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) splits explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and VitePress proof into six vertical phases. ADR 0003 remains proposed until the public composition and fallback rules are approved.
+
 ## Naming validation
 
 Use **Docs AI Island** as the product name and `docs-ai-island` as the npm package and repository slug for the island-only release.

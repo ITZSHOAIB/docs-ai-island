@@ -10,6 +10,7 @@ This directory and the root planning files are the source of truth for Docs AI I
 | [`../PLAN.md`](../PLAN.md) | Product research, positioning, full product design, and phased delivery | Pilot and VitePress proof implemented; V1 active |
 | [`../PROJECT_SETUP_PLAN.md`](../PROJECT_SETUP_PLAN.md) | Toolchain, repository structure, quality gates, and implementation sequence | Foundation, vertical slice, and first framework proof implemented |
 | [`adr/`](./adr/) | Accepted architectural decisions and their consequences | Two accepted decisions |
+| [`explorations/`](./explorations/) | Proposed design checkpoints and phase-level TDD plans | Content and built-in Actions proposed |
 | [`../CONTEXT.md`](../CONTEXT.md) | Original research and project context | Historical context |
 | [`../prototype/`](../prototype/) | Throwaway UI explorations and selection notes | Archived design evidence |
 

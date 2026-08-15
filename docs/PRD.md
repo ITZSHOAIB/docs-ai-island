@@ -4,6 +4,8 @@ Status: active
 Last updated: 2026-08-15
 Release state: pilot implemented; package publication intentionally disabled
 
+Current design checkpoint: content and built-in Action phases are explored in [`explorations/content-actions/`](./explorations/content-actions/); the public contract remains proposed and no capability in that exploration is shipped yet.
+
 ## Problem Statement
 
 Documentation teams want the useful AI handoff experience found in Vocs without migrating their existing VitePress, Astro/Starlight, Docusaurus, or custom documentation site. Existing alternatives often require a hosted search index, chatbot backend, content ingestion system, or framework-specific integration. Teams need a small, trustworthy UI that helps a reader take the current documentation page to an AI assistant or another page-level tool while leaving the site and its content pipeline under the team's control.
