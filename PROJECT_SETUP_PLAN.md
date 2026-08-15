@@ -34,7 +34,7 @@ The exact package name returned `E404` from npm and no exact-name GitHub reposit
 | Page actions and context | Partial | Canonical URL/title context, custom actions, events, and ChatGPT/Claude targets exist; copy/view/resource factories, visibility, validation, and privacy guidance remain. |
 | Content and route lifecycle | Not started | Explicit content sources, fallback experiments, cancellation across updates, and SPA navigation recipes remain. |
 | Framework proof | Not started | Plain packaged fixture plus VitePress, Starlight/Astro, and Docusaurus production fixtures remain. |
-| Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, CI, and publish workflow exist; Vocs site, reference docs, prerelease, provenance verification, and real-site validation remain. |
+| Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, and CI exist. Publishing is intentionally disabled; Vocs docs, reference docs, release approval, provenance setup, and real-site validation remain. |
 
 The current local pilot commit is `27ebc99`. Generated build output is not source-of-truth; the documents and tests describe the intended and verified state.
 
@@ -88,8 +88,7 @@ docs-ai-island/
 │   ├── pull_request_template.md
 │   └── workflows/
 │       ├── pull-request.yml
-│       ├── checks.yml
-│       └── publish.yml
+│       └── checks.yml
 ├── docs/
 │   ├── README.md
 │   ├── PRD.md
@@ -498,11 +497,12 @@ Pin GitHub Actions to commit SHAs. Use least-privilege permissions, cancel super
 
 ## Release plan
 
-- Start at `0.1.0` after the first vertical slice passes package, accessibility, and fixture checks.
-- Use prereleases (`next`) until at least two real documentation sites install it.
+- Keep npm publishing disabled while the package is under development. Pushes to `main` run checks only.
+- Do not add an active publishing workflow until the working-version gates below pass and the maintainer explicitly approves a release.
+- After approval, start with a `next` prerelease and retain prereleases until at least two real documentation sites install it.
 - Every published runtime/API/style-contract change requires a Changeset.
 - Documentation-only changes do not require a Changeset.
-- Publish from `main` only after reusable checks pass.
+- If publishing is later enabled, publish from `main` only after reusable checks pass.
 - Use npm trusted publishing with provenance; never store a long-lived npm token when trusted publishing is available.
 - Attach or retain the SBOM and verify the published package with Publint after release.
 
@@ -555,12 +555,12 @@ Exit: plain HTML and SPA navigation produce fresh Page Context without remount l
 
 Exit: every fixture’s production build and E2E suite pass.
 
-### Phase 6 — Documentation and alpha
+### Phase 6 — Documentation and release candidate
 
 - Build the Vocs site: landing page, live playground, install recipes, API/token/part reference, accessibility, privacy, CSP, troubleshooting, and migration policy.
-- Complete security docs, contribution guide, release workflow, and prerelease Changeset.
+- Complete security docs, contribution guide, release-readiness review, and a proposed prerelease Changeset. Keep publication disabled until explicit approval.
 
-Exit: clean-install smoke test passes and `0.1.0-next.0` can be published with provenance.
+Exit: clean-install smoke test passes and the maintainer can make an informed decision about enabling a provenance-backed `0.1.0-next.0` release.
 
 ## Deliberate non-choices
 
@@ -583,5 +583,5 @@ Project setup is complete when:
 - `pnpm check`, fixture builds, docs build, and all three browser engines pass;
 - the packed tarball passes Publint, Are the Types Wrong, server import, browser mount, and allowlist checks;
 - the playground imports source through the same public API expected of consumers;
-- CI can create a Changesets release PR and trusted-publishing job without secrets beyond GitHub permissions;
+- release configuration is documented but no active CI job can publish before explicit approval;
 - no production UI implementation has been copied from the throwaway prototype.

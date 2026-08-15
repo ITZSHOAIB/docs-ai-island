@@ -2,7 +2,7 @@
 
 Status: active
 Last updated: 2026-08-15
-Release state: local pilot implemented; package not yet published
+Release state: pilot implemented; package publication intentionally disabled
 
 ## Problem Statement
 
@@ -112,7 +112,7 @@ The two primary seams are the exported package API and the rendered island in a 
 - Production UI reproduces the approved Quiet Glass direction.
 - Zero-config and custom-action examples work in the Vite playground.
 - Type, unit, package, size, accessibility, browser, mobile, and visual checks pass.
-- The package has documentation, contribution guidance, security policy, CI, and a release workflow.
+- The package has documentation, contribution guidance, security policy, and CI. No active workflow can publish to npm.
 
 ### V1 alpha — pending
 
@@ -126,7 +126,8 @@ The two primary seams are the exported package API and the rendered island in a 
 - VitePress, Starlight/Astro, and Docusaurus production fixtures pass.
 - Strict CSP, hostile host CSS, RTL, long localization, and cross-browser states are validated.
 - Two independent documentation sites validate installation and integration behavior.
-- A prerelease and then `0.1.0` are published with provenance after the release gates pass.
+- A separate explicit release decision enables trusted publishing only after the working-version gates pass.
+- A prerelease and then `0.1.0` may be published with provenance after that approval.
 
 ## Success Signals
 

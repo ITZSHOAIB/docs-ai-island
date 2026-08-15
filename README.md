@@ -2,7 +2,7 @@
 
 A small, framework-neutral AI handoff island for documentation sites. It gives readers a polished place to open the current page in an AI assistant and run page-level actions without requiring a chatbot backend, index, API key, or framework migration.
 
-> **Pilot status:** the public API and styling contract are under active development. The package has not been published yet.
+> **Pilot status:** the public API and styling contract are under active development. Publishing is intentionally disabled until the working-version acceptance gates pass and a release is explicitly approved.
 
 ## Try the pilot
 

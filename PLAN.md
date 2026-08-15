@@ -30,6 +30,8 @@ The first production pilot is implemented and committed. It includes the framewo
 
 The pilot does **not** yet include built-in copy-page/view-Markdown/resource factories, content-source resolution, route visibility, automatic SPA lifecycle bridges, framework fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
 
+Publishing is intentionally disabled during development. CI validates pushes to `main`, but no GitHub Actions workflow may invoke `npm publish` or `changeset publish` until the working-version acceptance gates pass and the maintainer explicitly approves enabling releases.
+
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
 ## Naming validation
@@ -700,9 +702,10 @@ Exit gate: all fixture production builds and route-change tests pass.
 
 Exit gate: no known critical accessibility/privacy issues and installation succeeds from the packed tarball.
 
-### Phase 4 — `0.1.0` release
+### Phase 4 — explicit `0.1.0` release decision
 
-- publish `docs-ai-island`;
+- review the working version against the PRD and explicitly decide whether to enable npm trusted publishing;
+- only after approval, publish `docs-ai-island`;
 - ship a small demo site showing different host themes and configurations;
 - announce the precise backend-free positioning;
 - collect installation friction and requested Actions rather than immediately creating adapter packages.
