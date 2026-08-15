@@ -1,5 +1,7 @@
 # Phase 3: View as Markdown
 
+Status: complete
+
 ## User behavior
 
 A reader can open a declared Markdown representation. The package never invents a Markdown URL from the browser pathname.
@@ -21,3 +23,7 @@ The TypeScript contract requires a `DocsAiIslandViewableContentSource`. Arbitrar
 ## Exit gate
 
 Only explicit, viewable sources produce a Markdown Action, and navigation always uses current canonical context.
+
+## Result
+
+The declaration contract accepts `markdownSource()` and rejects callback-only sources. The Action resolves its URL only when selected, opens `_blank` with `noopener,noreferrer`, closes under the normal external-Action policy, and follows canonical context changed by an SPA after mount.

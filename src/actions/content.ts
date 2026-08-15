@@ -6,6 +6,7 @@ import type {
   DocsAiIslandPageContext,
   DocsAiIslandViewableContentSource,
   DocsAiMarkdownSourceOptions,
+  DocsAiViewMarkdownOptions,
 } from "../public-types.ts";
 
 function resolveMarkdownUrl(
@@ -56,6 +57,18 @@ export function markdownSource(
         throw new TypeError(`Markdown request failed with status ${response.status}`);
       }
       return { kind: "markdown", value: await response.text(), sourceUrl };
+    },
+  };
+}
+
+export function viewMarkdown(options: DocsAiViewMarkdownOptions): DocsAiIslandAction {
+  return {
+    id: "view-markdown",
+    label: options.label ?? "View as Markdown",
+    description: options.description ?? "Open the source Markdown",
+    icon: "file",
+    onSelect({ page }) {
+      window.open(options.source.viewUrl(page), "_blank", "noopener,noreferrer");
     },
   };
 }

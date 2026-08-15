@@ -8,6 +8,7 @@ import {
   defineContentSource,
   markdownSource,
   mountDocsAiIsland,
+  viewMarkdown,
 } from "../../src/index.ts";
 import "../../src/styles/index.css";
 import "./playground.css";
@@ -44,8 +45,15 @@ const inlineContent = defineContentSource({
 const remoteContent = markdownSource({
   url: () => new URL("/content/getting-started.md", window.location.origin),
 });
+const contextualRemoteContent = markdownSource({
+  url: (page) => new URL(`/content${page.canonicalUrl.pathname}.md`, page.canonicalUrl),
+});
 const fixtureOptions = new URLSearchParams(window.location.search);
-const pageContent = fixtureOptions.has("remote-content") ? remoteContent : inlineContent;
+const pageContent = fixtureOptions.has("contextual-content")
+  ? contextualRemoteContent
+  : fixtureOptions.has("remote-content")
+    ? remoteContent
+    : inlineContent;
 
 const markdown: DocsAiIslandAction = {
   id: "markdown",
@@ -54,6 +62,11 @@ const markdown: DocsAiIslandAction = {
   closeOnSelect: false,
   onSelect: () => showToast("A Markdown source can be connected here"),
 };
+const markdownAction = fixtureOptions.has("contextual-content")
+  ? viewMarkdown({ source: contextualRemoteContent })
+  : fixtureOptions.has("remote-content")
+    ? viewMarkdown({ source: remoteContent })
+    : markdown;
 
 const mcp: DocsAiIslandAction = {
   id: "mcp",
@@ -83,7 +96,7 @@ const config = defineConfig({
           source: pageContent,
           ...(fixtureOptions.has("copy-url-fallback") ? { fallback: "copy-url" as const } : {}),
         }),
-        markdown,
+        markdownAction,
         mcp,
       ],
     },

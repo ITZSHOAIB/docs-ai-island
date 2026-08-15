@@ -152,3 +152,9 @@ export interface DocsAiCopyPageOptions {
 export interface DocsAiMarkdownSourceOptions {
   readonly url: string | URL | ((page: DocsAiIslandPageContext) => string | URL);
 }
+
+export interface DocsAiViewMarkdownOptions {
+  readonly source: DocsAiIslandViewableContentSource;
+  readonly label?: string;
+  readonly description?: string;
+}

@@ -63,7 +63,13 @@ island.destroy();
 Content is an explicit, reusable capability. A custom source can return existing Markdown or text; `markdownSource()` fetches a URL only after the reader invokes the Action:
 
 ```ts
-import { copyPage, defineConfig, markdownSource, mountDocsAiIsland } from "docs-ai-island";
+import {
+  copyPage,
+  defineConfig,
+  markdownSource,
+  mountDocsAiIsland,
+  viewMarkdown,
+} from "docs-ai-island";
 
 const markdown = markdownSource({
   url: (page) => new URL(`/raw${page.canonicalUrl.pathname}.md`, page.canonicalUrl),
@@ -74,7 +80,7 @@ mountDocsAiIsland(
     groups: [
       {
         id: "page",
-        actions: [copyPage({ source: markdown })],
+        actions: [copyPage({ source: markdown }), viewMarkdown({ source: markdown })],
       },
     ],
   }),
@@ -82,6 +88,8 @@ mountDocsAiIsland(
 ```
 
 Non-success and network failures report an Action error and do not copy response bodies. Set `fallback: "copy-url"` on `copyPage()` only when copying the canonical link is an acceptable, explicit fallback.
+
+`viewMarkdown()` accepts only a viewable source such as `markdownSource()`. It opens the source URL in an independent window with `noopener,noreferrer` and resolves dynamic URLs from current page context when selected.
 
 ## VitePress
 

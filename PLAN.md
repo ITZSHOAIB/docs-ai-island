@@ -30,13 +30,13 @@ The first production pilot is implemented and committed. It includes the framewo
 
 The first framework proof is also implemented: a realistic VitePress 1.6 production fixture mounts from the default theme's `layout-bottom` slot, refreshes through the controller on SPA navigation, follows VitePress light/dark state, resolves explicit canonical URLs, coexists with another floating control, and passes mobile and axe checks. A second clean consumer installs the packed tarball and completes a VitePress production build.
 
-The pilot does **not** yet include built-in copy-page/view-Markdown/resource factories, content-source resolution, route visibility, packaged automatic SPA adapters, the remaining Starlight/Astro and Docusaurus fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
+The pilot does **not** yet include built-in resource factories, route visibility, packaged automatic SPA adapters, the remaining Starlight/Astro and Docusaurus fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
 
 Publishing is intentionally disabled during development. CI validates pushes to `main`, but no GitHub Actions workflow may invoke `npm publish` or `changeset publish` until the working-version acceptance gates pass and the maintainer explicitly approves enabling releases.
 
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
-The content-Action epic is active. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) splits explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and VitePress proof into six vertical phases. ADR 0003 is accepted. Phases 1–2 now ship lazy custom/URL sources, `copyPage()`, honest HTTP/network failure, and opt-in canonical-URL fallback.
+The content-Action epic is active. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) splits explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and VitePress proof into six vertical phases. ADR 0003 is accepted. Phases 1–3 now ship lazy custom/URL sources, `copyPage()`, honest HTTP/network failure, opt-in canonical-URL fallback, and `viewMarkdown()` with action-time Page Context.
 
 ## Naming validation
 
@@ -685,7 +685,7 @@ Exit gate status: visual and mobile behavior selected; content fallback directio
 
 Exit gate: a static site can install the package, configure Actions, and pass accessibility/browser tests without a framework runtime.
 
-Progress: the repository foundation, controller, page URL/title context, default AI targets, custom actions, appearance/messages/theme configuration, cleanup, plain playground, and Chromium accessibility/browser tests are complete. Content sources, built-in copy/view/resource actions, visibility, and navigation refresh remain.
+Progress: the repository foundation, controller, page URL/title context, default AI targets, custom actions, appearance/messages/theme configuration, cleanup, plain playground, and Chromium accessibility/browser tests are complete. Explicit custom/URL content sources and built-in copy/view Actions are complete; resource Actions, visibility, and automatic navigation refresh remain.
 
 ### Phase 2 — integration proof
 

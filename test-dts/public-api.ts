@@ -8,6 +8,7 @@ import {
   defineContentSource,
   markdownSource,
   mountDocsAiIsland,
+  viewMarkdown,
 } from "../src/index.ts";
 
 const action: DocsAiIslandAction = {
@@ -33,9 +34,17 @@ const remoteCopyAction: DocsAiIslandAction = copyPage({
   source: remoteMarkdown,
   fallback: "copy-url",
 });
+const viewMarkdownAction: DocsAiIslandAction = viewMarkdown({ source: remoteMarkdown });
+// @ts-expect-error Callback-only content sources do not declare a viewable URL.
+viewMarkdown({ source: contentContract });
 
 const config = defineConfig({
-  groups: [{ id: "main", actions: [chatgpt(), action, copyAction, remoteCopyAction] }],
+  groups: [
+    {
+      id: "main",
+      actions: [chatgpt(), action, copyAction, remoteCopyAction, viewMarkdownAction],
+    },
+  ],
   appearance: { placement: "bottom-right", density: "comfortable" },
   theme: { menuRadius: "14px", accent: "rebeccapurple" },
 });

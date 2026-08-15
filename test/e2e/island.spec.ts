@@ -12,6 +12,15 @@ test.beforeEach(async ({ page }) => {
         },
       },
     });
+    Object.defineProperty(window, "open", {
+      configurable: true,
+      value(url: string | URL, target: string, features: string) {
+        document.documentElement.dataset.fixtureOpenedUrl = String(url);
+        document.documentElement.dataset.fixtureOpenedTarget = target;
+        document.documentElement.dataset.fixtureOpenedFeatures = features;
+        return null;
+      },
+    });
   });
   await page.goto("/");
 });
@@ -160,6 +169,42 @@ test("treats an empty successful Markdown response as exact content", async ({ p
 
   await expect(page.locator("html")).toHaveAttribute("data-fixture-clipboard", "");
   await expect(island.locator('[data-part="live-region"]')).toHaveText("Markdown copied");
+});
+
+test("opens the configured Markdown URL in an independent safe window", async ({ page }) => {
+  await page.goto("/?remote-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "View as Markdown" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-opened-url",
+    "http://127.0.0.1:4173/content/getting-started.md",
+  );
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-opened-target", "_blank");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-opened-features",
+    "noopener,noreferrer",
+  );
+});
+
+test("resolves the Markdown URL from current SPA page context", async ({ page }) => {
+  await page.goto("/?contextual-content");
+  await page.evaluate(() => {
+    history.pushState({}, "", "/guides/routing");
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = "http://127.0.0.1:4173/guides/routing";
+  });
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "View as Markdown" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-opened-url",
+    "http://127.0.0.1:4173/content/guides/routing.md",
+  );
 });
 
 test("has no automatically detectable accessibility violations", async ({ page }) => {

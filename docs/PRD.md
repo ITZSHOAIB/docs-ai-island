@@ -58,7 +58,7 @@ The product is an **AI handoff island**, not an embedded chatbot. It does not an
 | FR-06 | Support placement, density, color scheme, surface, message, icon, and theme customization. | Implemented |
 | FR-07 | Expose stable DOM parts and state attributes for complete consumer styling. | Implemented |
 | FR-08 | Announce pending, successful, and failed actions and emit typed lifecycle events. | Implemented |
-| FR-09 | Provide built-in copy-page, view-Markdown, copy-resource, and open-URL factories. | Partial: `copyPage()` implemented |
+| FR-09 | Provide built-in copy-page, view-Markdown, copy-resource, and open-URL factories. | Partial: `copyPage()` and `viewMarkdown()` implemented |
 | FR-10 | Support explicit content sources and well-defined fallback behavior. | Implemented for custom and URL Markdown sources; DOM extraction deliberately deferred |
 | FR-11 | Support route visibility, page opt-out, and SPA lifecycle refresh. | Partial: VitePress refresh recipe proven; visibility and opt-out remain |
 | FR-12 | Provide tested recipes for plain HTML, VitePress, Starlight/Astro, and Docusaurus. | Partial: VitePress production fixture implemented |
