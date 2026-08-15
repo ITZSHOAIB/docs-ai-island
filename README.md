@@ -58,6 +58,57 @@ island.update({ appearance: { placement: "bottom-right" } });
 island.destroy();
 ```
 
+## VitePress
+
+The repository includes a production-built VitePress 1.6 fixture that uses the public package API. Extend the default theme, mount the island from the `layout-bottom` slot, and keep the controller alive across client-side navigation:
+
+```ts
+// .vitepress/theme/index.ts
+import { mountDocsAiIsland } from "docs-ai-island";
+import "docs-ai-island/styles.css";
+import { type Theme, useData, useRoute } from "vitepress";
+import DefaultTheme from "vitepress/theme";
+import { h, nextTick, onMounted, onUnmounted, watch } from "vue";
+
+const DocsAiIslandBridge = {
+  setup() {
+    const route = useRoute();
+    const { isDark } = useData();
+    let island: ReturnType<typeof mountDocsAiIsland> | undefined;
+
+    onMounted(() => {
+      island = mountDocsAiIsland({
+        appearance: { colorScheme: isDark.value ? "dark" : "light" },
+        theme: {
+          accent: "var(--vp-c-brand-1)",
+          fontFamily: "var(--vp-font-family-base)",
+        },
+      });
+    });
+
+    watch([() => route.path, isDark], async () => {
+      await nextTick();
+      island?.update({
+        appearance: { colorScheme: isDark.value ? "dark" : "light" },
+      });
+    });
+
+    onUnmounted(() => island?.destroy());
+    return () => null;
+  },
+};
+
+export default {
+  extends: DefaultTheme,
+  Layout: () =>
+    h(DefaultTheme.Layout, null, {
+      "layout-bottom": () => h(DocsAiIslandBridge),
+    }),
+} satisfies Theme;
+```
+
+See the [complete VitePress fixture](./fixtures/vitepress/) for canonical URL generation, custom actions, host-theme styling, and browser tests. Run it with `pnpm test:fixture:vitepress`; `pnpm test:fixture:vitepress:pack` also installs the packed tarball into a clean copied consumer and runs its production build.
+
 ## Customization
 
 The pilot exposes four layers without coupling consumers to internal class names:

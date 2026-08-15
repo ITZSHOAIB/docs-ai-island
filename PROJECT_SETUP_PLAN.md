@@ -32,11 +32,11 @@ The exact package name returned `E404` from npm and no exact-name GitHub reposit
 | Package validation | Complete for pilot | Publint, Are the Types Wrong ESM profile, packed-content/SSR import checks, and Brotli size budgets pass locally. |
 | Customization contract | Partial | Semantic options, messages, icons, tokens, stable parts, placements, densities, and unstyled use exist; generated reference, RTL, hostile CSS, and long-label coverage remain. |
 | Page actions and context | Partial | Canonical URL/title context, custom actions, events, and ChatGPT/Claude targets exist; copy/view/resource factories, visibility, validation, and privacy guidance remain. |
-| Content and route lifecycle | Not started | Explicit content sources, fallback experiments, cancellation across updates, and SPA navigation recipes remain. |
-| Framework proof | Not started | Plain packaged fixture plus VitePress, Starlight/Astro, and Docusaurus production fixtures remain. |
+| Content and route lifecycle | Partial | The VitePress recipe refreshes page context through `controller.update()` on route changes; explicit content sources, fallback experiments, visibility, and cancellation across updates remain. |
+| Framework proof | Partial | VitePress 1.6 production, browser, theme, SPA, canonical, mobile, accessibility, and packed-tarball checks pass. Plain packed HTML, Starlight/Astro, and Docusaurus fixtures remain. |
 | Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, and CI exist. Publishing is intentionally disabled; Vocs docs, reference docs, release approval, provenance setup, and real-site validation remain. |
 
-The current local pilot commit is `27ebc99`. Generated build output is not source-of-truth; the documents and tests describe the intended and verified state.
+The original pilot implementation landed at `27ebc99`; later checkpoints add project records, publishing safeguards, and framework proof. Generated build output is not source-of-truth; the documents and tests describe the intended and verified state.
 
 ## Decisions
 
@@ -552,6 +552,8 @@ Exit: plain HTML and SPA navigation produce fresh Page Context without remount l
 
 - Implement fixture-tested recipes for VitePress, Starlight, generic Astro, and Docusaurus.
 - Do not publish adapters unless at least two fixtures require the same non-trivial bridge and real users validate it.
+
+Progress: VitePress is complete against 1.6.4 with Vue 3.5.41. The fixture extends the default theme, mounts through `layout-bottom`, synchronizes route and theme changes without remounting, and validates both workspace and packed-tarball consumption. Starlight, generic Astro, and Docusaurus remain.
 
 Exit: every fixture’s production build and E2E suite pass.
 

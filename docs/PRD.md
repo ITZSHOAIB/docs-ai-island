@@ -58,8 +58,8 @@ The product is an **AI handoff island**, not an embedded chatbot. It does not an
 | FR-08 | Announce pending, successful, and failed actions and emit typed lifecycle events. | Implemented |
 | FR-09 | Provide built-in copy-page, view-Markdown, copy-resource, and open-URL factories. | Planned for V1 |
 | FR-10 | Support explicit content sources and well-defined fallback behavior. | Planned for V1 |
-| FR-11 | Support route visibility, page opt-out, and SPA lifecycle refresh. | Planned for V1 |
-| FR-12 | Provide tested recipes for plain HTML, VitePress, Starlight/Astro, and Docusaurus. | Planned for V1 |
+| FR-11 | Support route visibility, page opt-out, and SPA lifecycle refresh. | Partial: VitePress refresh recipe proven; visibility and opt-out remain |
+| FR-12 | Provide tested recipes for plain HTML, VitePress, Starlight/Astro, and Docusaurus. | Partial: VitePress production fixture implemented |
 
 ## Experience Requirements
 
@@ -93,7 +93,7 @@ The two primary seams are the exported package API and the rendered island in a 
 - Package tests cover export maps, packed contents, ESM resolution, and import without DOM globals.
 - Playwright tests cover menu behavior, keyboard navigation, focus restoration, runtime customization, mobile fit, accessibility, and approved visual baselines.
 - Size Limit enforces separate JavaScript and CSS budgets.
-- Future framework fixtures will consume the package through its public entry points and exercise production builds and route changes.
+- Framework fixtures consume the package through its public entry points and exercise production builds and route changes. The VitePress fixture additionally validates theme coexistence, canonical handoff, mobile fit, axe results, and a clean packed-tarball consumer build; the remaining framework fixtures are pending.
 
 ## Non-Functional Requirements
 
@@ -123,7 +123,7 @@ The two primary seams are the exported package API and the rendered island in a 
 
 ### V1 beta/release — pending
 
-- VitePress, Starlight/Astro, and Docusaurus production fixtures pass.
+- VitePress production and packed-consumer fixtures pass; Starlight/Astro and Docusaurus production fixtures remain.
 - Strict CSP, hostile host CSS, RTL, long localization, and cross-browser states are validated.
 - Two independent documentation sites validate installation and integration behavior.
 - A separate explicit release decision enables trusted publishing only after the working-version gates pass.

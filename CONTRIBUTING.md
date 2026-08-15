@@ -9,11 +9,15 @@ corepack enable
 pnpm install --frozen-lockfile
 pnpm check
 pnpm test:browser
+pnpm test:fixture:vitepress
+pnpm test:fixture:vitepress:pack
 ```
 
 The permanent playground imports production source. Use `pnpm dev` for visual development. The `prototype/` directory is archived design evidence; production code must not import it.
 
 Add a Changeset for published runtime, API, or styling-contract changes. Documentation-only changes do not require one.
+
+The VitePress fixture runs from a production build on a fresh local preview server. Its packed-package check copies the fixture into `.tmp/`, installs the generated tarball as a normal dependency, and verifies a clean production build.
 
 ## Keep project records current
 

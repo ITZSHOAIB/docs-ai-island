@@ -1,0 +1,19 @@
+{
+  "name": "docs-ai-island-fixture-vitepress",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vitepress build",
+    "dev": "vitepress dev",
+    "preview": "vitepress preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "docs-ai-island": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitepress": "1.6.4",
+    "vue": "3.5.41"
+  }
+}

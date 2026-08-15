@@ -16,3 +16,7 @@ The pilot implements the Island as a framework-neutral browser component with a 
 ## Consequences
 
 The browser core is SSR-safe, exposes an imperative mount/controller lifecycle and strong theming hooks, and avoids assuming that raw Markdown exists at a predictable URL. SPA lifecycle recipes and framework fixtures remain release work. Framework-specific wrappers remain possible without changing the product model, but require evidence from at least two integrations repeating the same non-trivial bridge.
+
+## Validation evidence
+
+The VitePress 1.6 fixture added on 2026-08-15 validates the recipe-first approach. A fixture-owned Vue bridge is sufficient to mount the framework-neutral package, update it after client-side route and theme changes, and destroy it with the host layout. The published package remains free of Vue and VitePress dependencies. This is one integration, so it does not yet meet the threshold for extracting an adapter.

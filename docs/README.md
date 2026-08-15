@@ -7,8 +7,8 @@ This directory and the root planning files are the source of truth for Docs AI I
 | Document | Purpose | Current state |
 | --- | --- | --- |
 | [`PRD.md`](./PRD.md) | Product requirements, users, acceptance criteria, and release boundary | Active for the pilot and V1 |
-| [`../PLAN.md`](../PLAN.md) | Product research, positioning, full product design, and phased delivery | Pilot implemented; V1 active |
-| [`../PROJECT_SETUP_PLAN.md`](../PROJECT_SETUP_PLAN.md) | Toolchain, repository structure, quality gates, and implementation sequence | Foundation and vertical slice implemented |
+| [`../PLAN.md`](../PLAN.md) | Product research, positioning, full product design, and phased delivery | Pilot and VitePress proof implemented; V1 active |
+| [`../PROJECT_SETUP_PLAN.md`](../PROJECT_SETUP_PLAN.md) | Toolchain, repository structure, quality gates, and implementation sequence | Foundation, vertical slice, and first framework proof implemented |
 | [`adr/`](./adr/) | Accepted architectural decisions and their consequences | Two accepted decisions |
 | [`../CONTEXT.md`](../CONTEXT.md) | Original research and project context | Historical context |
 | [`../prototype/`](../prototype/) | Throwaway UI explorations and selection notes | Archived design evidence |
@@ -21,4 +21,4 @@ This directory and the root planning files are the source of truth for Docs AI I
 - Keep completed and unimplemented work visibly separate.
 - Documentation-only changes do not require a Changeset.
 
-Last reconciled with the implementation on 2026-08-15 at commit `27ebc99`.
+Last reconciled with the implementation on 2026-08-15 after the VitePress integration proof.

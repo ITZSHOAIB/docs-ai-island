@@ -28,7 +28,9 @@ This is a **handoff Island**, not an embedded chatbot. That distinction should r
 
 The first production pilot is implemented and committed. It includes the framework-neutral SSR-safe core, controller lifecycle, zero-config ChatGPT and Claude targets, custom action groups, typed events, the Quiet Glass UI, external cascade-layered CSS, theme tokens, stable DOM parts, a Vite playground, and unit/type/package/size/accessibility/browser/visual checks.
 
-The pilot does **not** yet include built-in copy-page/view-Markdown/resource factories, content-source resolution, route visibility, automatic SPA lifecycle bridges, framework fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
+The first framework proof is also implemented: a realistic VitePress 1.6 production fixture mounts from the default theme's `layout-bottom` slot, refreshes through the controller on SPA navigation, follows VitePress light/dark state, resolves explicit canonical URLs, coexists with another floating control, and passes mobile and axe checks. A second clean consumer installs the packed tarball offline and completes a VitePress production build.
+
+The pilot does **not** yet include built-in copy-page/view-Markdown/resource factories, content-source resolution, route visibility, packaged automatic SPA adapters, the remaining Starlight/Astro and Docusaurus fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
 
 Publishing is intentionally disabled during development. CI validates pushes to `main`, but no GitHub Actions workflow may invoke `npm publish` or `changeset publish` until the working-version acceptance gates pass and the maintainer explicitly approves enabling releases.
 
@@ -691,6 +693,8 @@ Progress: the repository foundation, controller, page URL/title context, default
 - publish a compatibility matrix with exact tested framework versions.
 
 Exit gate: all fixture production builds and route-change tests pass.
+
+Progress: the VitePress 1.6 recipe and fixture are complete. They cover production/SSR build, public-package mounting, canonical handoff, SPA route refresh without remounting, host theme synchronization, floating-control coexistence, mobile gutters, accessibility, and a packed-tarball consumer build. Starlight/Astro and Docusaurus remain; content-source cases wait on the Phase 1 content factories.
 
 ### Phase 3 — beta hardening
 

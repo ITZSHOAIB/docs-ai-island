@@ -1,0 +1,39 @@
+:root {
+  --vp-c-brand-1: #5b5bd6;
+  --vp-c-brand-2: #6d6de0;
+  --vp-c-brand-3: #7f7fe8;
+}
+
+/* Representative host rules that commonly expose widget leakage. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+svg {
+  display: block;
+}
+
+.support-fab {
+  position: fixed;
+  inset-block-end: 18px;
+  inset-inline-end: 18px;
+  z-index: 20;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 50%;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
+  box-shadow: var(--vp-shadow-2);
+}
