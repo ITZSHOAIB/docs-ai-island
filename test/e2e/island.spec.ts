@@ -43,6 +43,38 @@ test("opens the Option A menu and exposes stable parts", async ({ page }) => {
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
 });
 
+test("renders the complete public part contract", async ({ page }) => {
+  await page.goto("/?part-contract");
+  const parts = await page
+    .locator("[data-docs-ai-island] [data-part]")
+    .evaluateAll((elements) =>
+      [...new Set(elements.map((element) => element.getAttribute("data-part")))].sort(),
+    );
+
+  expect(parts).toEqual([
+    "action",
+    "action-arrow",
+    "action-copy",
+    "action-description",
+    "action-label",
+    "actions",
+    "chevron",
+    "group-label",
+    "header",
+    "header-copy",
+    "icon",
+    "icon-frame",
+    "live-region",
+    "menu",
+    "page-title",
+    "title",
+    "trigger",
+    "trigger-label",
+    "utilities",
+    "utility",
+  ]);
+});
+
 test("mounts one native hidden Island when visibility is false", async ({ page }) => {
   await page.goto("/?hidden");
 

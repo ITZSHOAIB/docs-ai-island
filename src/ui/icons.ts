@@ -1,3 +1,4 @@
+import { parts } from "../generated/customization-contract.ts";
 import type { DocsAiIslandIcon, DocsAiIslandIconName } from "../public-types.ts";
 
 const paths: Record<DocsAiIslandIconName, readonly string[]> = {
@@ -25,7 +26,7 @@ export function createIcon(document: Document, icon: DocsAiIslandIcon): Node | u
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("data-part", "icon");
+  svg.setAttribute("data-part", parts.icon);
 
   for (const pathData of paths[icon]) {
     const path = document.createElementNS("http://www.w3.org/2000/svg", "path");

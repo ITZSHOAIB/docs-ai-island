@@ -5,6 +5,8 @@ import {
   type DocsAiIslandAction,
   type DocsAiIslandContentSource,
   type DocsAiIslandController,
+  type DocsAiIslandPartName,
+  type DocsAiIslandTheme,
   defineConfig,
   defineContentSource,
   markdownSource,
@@ -12,6 +14,17 @@ import {
   openUrl,
   viewMarkdown,
 } from "../src/index.ts";
+
+const publicPart: DocsAiIslandPartName = "menu";
+void publicPart;
+
+const completeTheme = {
+  menuRadius: "14px",
+  accent: "rebeccapurple",
+  itemHeight: "52px",
+  menuPadding: "8px",
+  backdropFilter: "blur(16px)",
+} satisfies DocsAiIslandTheme;
 
 const action: DocsAiIslandAction = {
   id: "search",
@@ -68,7 +81,7 @@ const config = defineConfig({
     },
   ],
   appearance: { placement: "bottom-right", density: "comfortable" },
-  theme: { menuRadius: "14px", accent: "rebeccapurple" },
+  theme: completeTheme,
 });
 
 const controller: DocsAiIslandController = mountDocsAiIsland(config);

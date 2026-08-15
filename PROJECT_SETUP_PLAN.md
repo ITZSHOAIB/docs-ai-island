@@ -30,11 +30,11 @@ The exact package name returned `E404` from npm and no exact-name GitHub reposit
 | Repository foundation | Complete | Root package, pnpm workspace, strict TypeScript, Biome, tsdown, Lightning CSS, Changesets, hooks, package metadata, and pinned lockfile are present. |
 | Option A vertical slice | Complete | Quiet Glass production UI, controller, defaults, customization, playground, desktop/mobile snapshots, keyboard tests, and axe coverage are present. |
 | Package validation | Complete for pilot | Publint, Are the Types Wrong ESM profile, packed-content/SSR import checks, and Brotli size budgets pass locally. |
-| Customization contract | Partial | Semantic options, messages, icons, tokens, stable parts, placements, densities, and unstyled use exist; generated reference, RTL, hostile CSS, and long-label coverage remain. |
+| Customization contract | Complete for alpha | Semantic options, messages, icons, 23 typed tokens, 20 typed parts, placements, densities, unstyled use, generated reference, and drift checks exist; RTL, hostile CSS, and long-label coverage remain beta hardening. |
 | Page actions and context | Complete for alpha | Canonical URL/title context, custom actions, events, ChatGPT/Claude, custom and URL Markdown sources, lazy copy/view/resource Actions, explicit fallback, and lifecycle hardening pass. |
 | Content and route lifecycle | Complete for alpha | Predicate visibility, page opt-out, explicit refresh, cancellation, and route-specific content pass in plain HTML and VitePress. |
 | Framework proof | Partial | Plain packed HTML and VitePress 1.6 production, browser, theme, SPA, canonical, mobile, accessibility, and packed-tarball checks pass. Starlight/Astro and Docusaurus remain. |
-| Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, and CI exist. Publishing is intentionally disabled; Vocs docs, reference docs, release approval, provenance setup, and real-site validation remain. |
+| Documentation and release | Partial | README, generated customization reference, PRD, plans, ADRs, contribution/security docs, and CI exist. Publishing is intentionally disabled; the Vocs site, remaining reference docs, release approval, provenance setup, and real-site validation remain. |
 
 The original pilot implementation landed at `27ebc99`; later checkpoints add project records, publishing safeguards, and framework proof. Generated build output is not source-of-truth; the documents and tests describe the intended and verified state.
 
@@ -526,13 +526,15 @@ Exit: `pnpm install`, `pnpm lint`, `pnpm typecheck`, `pnpm build`, and `pnpm tes
 
 Exit: one custom Action can be mounted, invoked, styled, updated, and destroyed in plain HTML.
 
-### Phase 2 — Customization contract — in progress
+### Phase 2 — Customization contract — complete for alpha
 
 - Finalize semantic appearance options, typed theme tokens, messages, icons, stable parts, RTL, density, placement, mobile behavior, and unstyled use.
 - Generate the token reference from one source of truth.
 - Add hostile CSS and long-localization tests.
 
-Exit: every documented token/part has a test; no production CSS relies on the prototype.
+Progress: one TypeScript manifest defines all 23 public tokens and 20 stable parts; public theme types and renderer names derive from it. The generated reference and validation cover every CSS default, prefixed property, styled part, and rendered part. Hostile CSS, RTL, and long-localization scenarios move to beta hardening rather than blocking the framework-neutral alpha.
+
+Exit: every documented token/part has a test; no production CSS relies on the prototype. Passed for alpha.
 
 ### Phase 3 — Page context and built-in Actions
 

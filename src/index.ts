@@ -5,6 +5,10 @@ export { copyPage, defineContentSource, markdownSource, viewMarkdown } from "./a
 export { copyResource, openUrl } from "./actions/resources.ts";
 export { chatgpt, claude } from "./actions/targets.ts";
 export type {
+  DocsAiIslandPartName,
+  DocsAiIslandThemeTokenName,
+} from "./generated/customization-contract.ts";
+export type {
   DocsAiCopyPageOptions,
   DocsAiCopyResourceOptions,
   DocsAiIslandAction,

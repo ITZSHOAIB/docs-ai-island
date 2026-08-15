@@ -1,3 +1,8 @@
+import {
+  type DocsAiIslandPartName,
+  parts,
+  themeProperties,
+} from "../generated/customization-contract.ts";
 import type {
   DocsAiIslandAction,
   DocsAiIslandActionContext,
@@ -26,29 +31,6 @@ type ActionOperation = {
 
 const controllers = new WeakMap<Element, DocsAiIslandController>();
 let islandId = 0;
-
-const themeProperties: Record<keyof DocsAiIslandThemeTokens, string> = {
-  accent: "--docs-ai-island-accent",
-  surface: "--docs-ai-island-surface",
-  foreground: "--docs-ai-island-foreground",
-  muted: "--docs-ai-island-muted",
-  faint: "--docs-ai-island-faint",
-  border: "--docs-ai-island-border",
-  hover: "--docs-ai-island-hover",
-  focusRing: "--docs-ai-island-focus-ring",
-  shadow: "--docs-ai-island-shadow",
-  menuWidth: "--docs-ai-island-menu-width",
-  menuRadius: "--docs-ai-island-menu-radius",
-  triggerWidth: "--docs-ai-island-trigger-width",
-  triggerHeight: "--docs-ai-island-trigger-height",
-  triggerRadius: "--docs-ai-island-trigger-radius",
-  offsetBlock: "--docs-ai-island-offset-block",
-  offsetInline: "--docs-ai-island-offset-inline",
-  zIndex: "--docs-ai-island-z-index",
-  fontFamily: "--docs-ai-island-font-family",
-  motionDuration: "--docs-ai-island-motion-duration",
-  motionEasing: "--docs-ai-island-motion-easing",
-};
 
 function resolveContainer(document: Document, container?: Element | string): Element {
   if (container instanceof Element) return container;
@@ -93,7 +75,12 @@ function emit(config: NormalizedConfig, event: DocsAiIslandEvent): void {
   }
 }
 
-function createText(document: Document, part: string, text: string, tag = "span"): HTMLElement {
+function createText(
+  document: Document,
+  part: DocsAiIslandPartName,
+  text: string,
+  tag = "span",
+): HTMLElement {
   const element = document.createElement(tag);
   element.dataset.part = part;
   element.textContent = text;
@@ -148,28 +135,28 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     const { action, group } = entry;
     const button = ownerDocument.createElement("button");
     button.type = "button";
-    button.dataset.part = group.kind === "utility" ? "utility" : "action";
+    button.dataset.part = group.kind === "utility" ? parts.utility : parts.action;
     button.dataset.actionId = action.id;
     button.disabled = action.disabled ?? false;
 
     const icon = createIcon(ownerDocument, action.icon ?? "external");
     if (icon) {
       const iconFrame = ownerDocument.createElement("span");
-      iconFrame.dataset.part = "icon-frame";
+      iconFrame.dataset.part = parts.iconFrame;
       iconFrame.append(icon);
       button.append(iconFrame);
     }
 
     const copy = ownerDocument.createElement("span");
-    copy.dataset.part = "action-copy";
-    copy.append(createText(ownerDocument, "action-label", action.label, "strong"));
+    copy.dataset.part = parts.actionCopy;
+    copy.append(createText(ownerDocument, parts.actionLabel, action.label, "strong"));
     if (action.description && group.kind !== "utility") {
-      copy.append(createText(ownerDocument, "action-description", action.description, "small"));
+      copy.append(createText(ownerDocument, parts.actionDescription, action.description, "small"));
     }
     button.append(copy);
 
     if (group.kind !== "utility") {
-      button.append(createText(ownerDocument, "action-arrow", "↗"));
+      button.append(createText(ownerDocument, parts.actionArrow, "↗"));
     }
     return button;
   }
@@ -191,27 +178,27 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
 
     menu = ownerDocument.createElement("div");
     menu.id = menuId;
-    menu.dataset.part = "menu";
+    menu.dataset.part = parts.menu;
     menu.setAttribute("role", "dialog");
     menu.setAttribute("aria-modal", "false");
     menu.setAttribute("aria-label", config.messages.menuTitle);
     menu.setAttribute("aria-hidden", String(state.status !== "open"));
 
     const header = ownerDocument.createElement("div");
-    header.dataset.part = "header";
+    header.dataset.part = parts.header;
     const headerCopy = ownerDocument.createElement("span");
-    headerCopy.dataset.part = "header-copy";
-    headerCopy.append(createText(ownerDocument, "title", config.messages.menuTitle, "strong"));
-    headerCopy.append(createText(ownerDocument, "page-title", page.title, "small"));
+    headerCopy.dataset.part = parts.headerCopy;
+    headerCopy.append(createText(ownerDocument, parts.title, config.messages.menuTitle, "strong"));
+    headerCopy.append(createText(ownerDocument, parts.pageTitle, page.title, "small"));
     header.append(headerCopy);
     menu.append(header);
 
     for (const group of config.groups) {
       const groupElement = ownerDocument.createElement("div");
-      groupElement.dataset.part = group.kind === "utility" ? "utilities" : "actions";
+      groupElement.dataset.part = group.kind === "utility" ? parts.utilities : parts.actions;
       groupElement.dataset.groupId = group.id;
       if (group.label) {
-        groupElement.append(createText(ownerDocument, "group-label", group.label));
+        groupElement.append(createText(ownerDocument, parts.groupLabel, group.label));
       }
       for (const action of group.actions) {
         const entry = { action, group };
@@ -223,21 +210,21 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
 
     trigger = ownerDocument.createElement("button");
     trigger.type = "button";
-    trigger.dataset.part = "trigger";
+    trigger.dataset.part = parts.trigger;
     trigger.setAttribute("aria-controls", menuId);
     trigger.setAttribute("aria-expanded", String(state.status === "open"));
     trigger.setAttribute("aria-label", config.messages.triggerLabel);
     const triggerIcon = createIcon(ownerDocument, "sparkles");
     if (triggerIcon) trigger.append(triggerIcon);
     trigger.append(
-      createText(ownerDocument, "trigger-label", config.messages.triggerLabel, "strong"),
+      createText(ownerDocument, parts.triggerLabel, config.messages.triggerLabel, "strong"),
     );
-    const chevron = createText(ownerDocument, "chevron", "⌃");
+    const chevron = createText(ownerDocument, parts.chevron, "⌃");
     chevron.setAttribute("aria-hidden", "true");
     trigger.append(chevron);
 
     liveRegion = ownerDocument.createElement("div");
-    liveRegion.dataset.part = "live-region";
+    liveRegion.dataset.part = parts.liveRegion;
     liveRegion.setAttribute("role", "status");
     liveRegion.setAttribute("aria-live", "polite");
     liveRegion.setAttribute("aria-atomic", "true");

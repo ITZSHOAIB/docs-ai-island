@@ -218,11 +218,14 @@ The [plain HTML fixture](./fixtures/html/) imports only the public JavaScript an
 The pilot exposes four layers without coupling consumers to internal class names:
 
 - semantic appearance options for placement, density, color scheme, and surface;
-- typed theme tokens, applied as scoped `--docs-ai-island-*` custom properties;
-- stable `data-part`, state, placement, density, and action attributes;
+- 23 typed theme tokens, applied as scoped `--docs-ai-island-*` custom properties;
+- 20 stable `data-part` hooks plus state, placement, density, and Action attributes;
 - replaceable labels, descriptions, icons, actions, and groups.
 
 Styles are never injected by JavaScript. Omit the stylesheet to own the presentation completely.
+The generated [customization reference](./docs/reference/customization.md) lists every theme key,
+CSS property, default value, and stable part. `pnpm docs:customization:check` prevents the reference,
+stylesheet, types, and renderer vocabulary from drifting.
 
 ## Scope
 

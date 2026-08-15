@@ -4,6 +4,8 @@ Explorations are short-lived design checkpoints for work that changes public beh
 
 | Exploration | Status | Outcome |
 | --- | --- | --- |
-| [`content-actions/`](./content-actions/) | Proposed; approval pending | Exact content handoff, Markdown viewing, resource actions, and lifecycle hardening |
+| [`content-actions/`](./content-actions/) | Complete | Exact content handoff, Markdown viewing, resource Actions, and lifecycle hardening |
+| [`route-lifecycle/`](./route-lifecycle/) | Complete | Predicate visibility, explicit refresh, frontmatter opt-out, and packed plain-HTML proof |
+| [`customization-reference/`](./customization-reference/) | Complete | One token/part manifest, generated reference, drift checks, and complete browser part assertion |
 
 Explorations may be revised while proposed. They are not shipped API documentation.

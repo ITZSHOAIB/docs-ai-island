@@ -1,6 +1,6 @@
 # Docs AI Island: Product and Implementation Plan
 
-Status: pilot vertical slice implemented; V1 planning active
+Status: V1 alpha complete locally; beta integration proof active
 Research snapshot: 2026-08-14
 Last implementation reconciliation: 2026-08-15
 Package: `docs-ai-island`
@@ -37,6 +37,8 @@ Publishing is intentionally disabled during development. CI validates pushes to 
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
 The content-Action epic is complete. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) records six vertical phases covering explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and the VitePress proof. ADR 0003 is accepted. The pilot now ships lazy custom/URL sources, `copyPage()`, honest HTTP/network failure, opt-in canonical-URL fallback, `viewMarkdown()` with action-time Page Context, generic copy/open resource Actions, operation-scoped cancellation and event privacy, and exact copy/view validation in workspace and packed VitePress consumers.
+
+The V1 alpha customization gate is complete. One checked-in manifest now defines 23 typed theme tokens and 20 stable DOM parts, the renderer consumes that vocabulary, and a generated reference documents every key, CSS property, default, part, and purpose. `pnpm check` rejects stale reference output, CSS token drift, or unregistered styled parts.
 
 ## Naming validation
 
@@ -651,7 +653,7 @@ Light DOM with external, cascade-layered CSS is the implementation recommendatio
 
 Exit gate status: visual and mobile behavior selected; content fallback direction remains open.
 
-### Phase 1 — framework-neutral alpha — substantially complete
+### Phase 1 — framework-neutral alpha — complete locally
 
 - initialize package, tooling, license, contribution files, and CI;
 - implement Page Context, Content Source, Action, and event contracts;
@@ -662,7 +664,7 @@ Exit gate status: visual and mobile behavior selected; content fallback directio
 
 Exit gate: a static site can install the package, configure Actions, and pass accessibility/browser tests without a framework runtime.
 
-Progress: the repository foundation, controller, page URL/title context, default AI targets, custom actions, appearance/messages/theme configuration, cleanup, plain playground, Chromium accessibility/browser tests, explicit custom/URL content sources, built-in copy/view/resource Actions, predicate visibility, explicit SPA refresh, and packed plain-HTML proof are complete. The generated token/part reference remains before the alpha exit gate is fully closed.
+Progress: the repository foundation, controller, page URL/title context, default AI targets, custom Actions, appearance/messages/theme configuration, cleanup, plain playground, Chromium accessibility/browser tests, explicit custom/URL Content Sources, built-in copy/view/resource Actions, predicate visibility, explicit SPA refresh, packed plain-HTML proof, and generated token/part contract are complete. Publication is still disabled and is not part of this gate.
 
 ### Phase 2 — integration proof
 

@@ -1,3 +1,5 @@
+import type { DocsAiIslandThemeTokenName } from "./generated/customization-contract.ts";
+
 export type MaybePromise<T> = T | Promise<T>;
 
 export type DocsAiIslandPlacement = "bottom-left" | "bottom-center" | "bottom-right";
@@ -89,28 +91,7 @@ export interface DocsAiIslandMessages {
   readonly actionFailed: (label: string) => string;
 }
 
-export interface DocsAiIslandThemeTokens {
-  readonly accent: string;
-  readonly surface: string;
-  readonly foreground: string;
-  readonly muted: string;
-  readonly faint: string;
-  readonly border: string;
-  readonly hover: string;
-  readonly focusRing: string;
-  readonly shadow: string;
-  readonly menuWidth: string;
-  readonly menuRadius: string;
-  readonly triggerWidth: string;
-  readonly triggerHeight: string;
-  readonly triggerRadius: string;
-  readonly offsetBlock: string;
-  readonly offsetInline: string;
-  readonly zIndex: string;
-  readonly fontFamily: string;
-  readonly motionDuration: string;
-  readonly motionEasing: string;
-}
+export type DocsAiIslandThemeTokens = Readonly<Record<DocsAiIslandThemeTokenName, string>>;
 
 export type DocsAiIslandTheme = Partial<DocsAiIslandThemeTokens>;
 

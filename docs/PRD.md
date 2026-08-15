@@ -4,7 +4,7 @@ Status: active
 Last updated: 2026-08-15
 Release state: pilot implemented; package publication intentionally disabled
 
-Current design checkpoint: content and built-in Action phases are explored in [`explorations/content-actions/`](./explorations/content-actions/); the public contract remains proposed and no capability in that exploration is shipped yet.
+Current design checkpoint: the V1 alpha contract is implemented. Content Actions, route lifecycle, and generated customization-reference evidence live under [`explorations/`](./explorations/); V1 beta integration and hardening remain active.
 
 ## Problem Statement
 
@@ -55,8 +55,8 @@ The product is an **AI handoff island**, not an embedded chatbot. It does not an
 | FR-03 | Resolve the current URL, canonical URL, and page title at action/render time. | Implemented |
 | FR-04 | Support custom action groups and synchronous or asynchronous handlers. | Implemented |
 | FR-05 | Return a controller with open, close, update, and destroy operations. | Implemented |
-| FR-06 | Support placement, density, color scheme, surface, message, icon, and theme customization. | Implemented |
-| FR-07 | Expose stable DOM parts and state attributes for complete consumer styling. | Implemented |
+| FR-06 | Support placement, density, color scheme, surface, message, icon, and theme customization. | Implemented with 23 typed tokens and generated reference coverage |
+| FR-07 | Expose stable DOM parts and state attributes for complete consumer styling. | Implemented with 20 typed, documented, browser-tested parts |
 | FR-08 | Announce pending, successful, and failed actions and emit typed lifecycle events. | Implemented |
 | FR-09 | Provide built-in copy-page, view-Markdown, copy-resource, and open-URL factories. | Implemented |
 | FR-10 | Support explicit content sources and well-defined fallback behavior. | Implemented for custom and URL Markdown sources; DOM extraction deliberately deferred |
@@ -116,14 +116,14 @@ The two primary seams are the exported package API and the rendered island in a 
 - Type, unit, package, size, accessibility, browser, mobile, and visual checks pass.
 - The package has documentation, contribution guidance, security policy, and CI. No active workflow can publish to npm.
 
-### V1 alpha — substantially complete
+### V1 alpha — complete locally
 
 - Content-source and built-in page/resource actions are implemented.
 - Visibility and SPA lifecycle behavior are defined and tested.
 - At least the plain HTML fixture passes as a packed-package consumer.
 - The public token and part reference is generated or verified from one source of truth.
 
-The first three gates pass. Token/part reference generation remains before the alpha milestone is complete.
+All four gates pass. The reference is generated from the same manifest used by public token types and runtime part names; validation also checks CSS defaults and selector coverage. Package publication remains intentionally disabled.
 
 ### V1 beta/release — pending
 

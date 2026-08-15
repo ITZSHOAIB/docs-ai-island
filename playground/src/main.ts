@@ -111,6 +111,7 @@ const config = defineConfig({
     {
       id: "targets",
       kind: "primary",
+      ...(fixtureOptions.has("part-contract") ? { label: "Open in" } : {}),
       actions: [chatgpt(), claude()],
     },
     {
