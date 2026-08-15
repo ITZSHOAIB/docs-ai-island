@@ -21,7 +21,7 @@ Create one small, ESM-only, framework-neutral browser library with:
 
 The repository should remain a **single publishable package at the root**. `docs`, `playground`, and fixture applications are pnpm workspace projects but are never published. Do not create adapter packages until repeated real-world integration logic proves they are needed.
 
-The package name was not present on npm when checked on 2026-08-15. Availability must be checked again immediately before publishing.
+The exact package name returned `E404` from npm and no exact-name GitHub repository was found when rechecked on 2026-08-15. Availability is time-sensitive and must be checked again immediately before publishing. Product-level rationale and limitations are recorded in the naming-validation section of `PLAN.md`.
 
 ## Current progress
 

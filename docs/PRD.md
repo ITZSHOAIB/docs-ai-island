@@ -156,6 +156,8 @@ The two primary seams are the exported package API and the rendered island in a 
 
 ## Further Notes
 
+- The product name is **Docs AI Island** and the package slug is `docs-ai-island`. Live npm and GitHub checks found the exact slug unclaimed on 2026-08-15, but availability must be rechecked immediately before publication.
+- The descriptive name is approved for this narrowly scoped package, not as a guaranteed umbrella brand for a future agent-support suite. The check is not a legal trademark clearance.
 - [`../PLAN.md`](../PLAN.md) contains the full research, product rationale, risk analysis, and delivery sequence.
 - [`../PROJECT_SETUP_PLAN.md`](../PROJECT_SETUP_PLAN.md) contains the toolchain and repository implementation plan.
 - [`adr/`](./adr/) records durable architecture decisions.

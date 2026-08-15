@@ -32,6 +32,21 @@ The pilot does **not** yet include built-in copy-page/view-Markdown/resource fac
 
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
+## Naming validation
+
+Use **Docs AI Island** as the product name and `docs-ai-island` as the npm package and repository slug for the island-only release.
+
+Live checks on 2026-08-15 found:
+
+- the exact npm package returned `E404` and was therefore unclaimed at check time;
+- GitHub repository search returned no exact-name repository;
+- the intended `ITZSHOAIB/docs-ai-island` repository path returned `404` before creation;
+- a general web search found no established developer product using the exact compound name.
+
+Product verdict: keep the name. It is clear, searchable by the relevant concepts, consistent with the UI's island architecture, and honest about the narrow package scope. The trade-off is that all three words are descriptive, `AI Island` has unrelated uses, and the name would be restrictive if the project later became a broad agent-support suite. If that broader product is ever pursued, retain `docs-ai-island` as this package and choose a separate umbrella name.
+
+Availability checks are time-sensitive and do not reserve a name. Recheck npm and GitHub immediately before publishing or creating the remote. This research is not a trademark clearance; obtain appropriate legal review before investing materially in a protected commercial brand.
+
 ## Why this is worth building
 
 Vocs demonstrates a useful low-infrastructure interaction: its menu opens the page in ChatGPT or Claude, copies page Markdown, opens the Markdown asset, and conditionally copies an MCP URL. Its implementation also accounts for static-build Markdown paths, mobile deep links, page-level visibility, clipboard fallback, and `Cmd/Ctrl+I`.
