@@ -2,12 +2,14 @@ import {
   chatgpt,
   claude,
   copyPage,
+  copyResource,
   type DocsAiIslandAction,
   type DocsAiIslandAppearance,
   defineConfig,
   defineContentSource,
   markdownSource,
   mountDocsAiIsland,
+  openUrl,
   viewMarkdown,
 } from "../../src/index.ts";
 import "../../src/styles/index.css";
@@ -24,10 +26,6 @@ function showToast(message: string): void {
   toastTimer = window.setTimeout(() => {
     toast.hidden = true;
   }, 1800);
-}
-
-async function copy(value: string): Promise<void> {
-  await navigator.clipboard.writeText(value);
 }
 
 document.documentElement.dataset.fixtureContentReads = "0";
@@ -68,17 +66,18 @@ const markdownAction = fixtureOptions.has("contextual-content")
     ? viewMarkdown({ source: remoteContent })
     : markdown;
 
-const mcp: DocsAiIslandAction = {
+const mcp = copyResource({
   id: "mcp",
   label: "MCP",
   icon: "link",
-  closeOnSelect: false,
-  onSelect: async () => {
-    await copy("https://docs.luma.dev/api/mcp");
-    showToast("MCP URL copied");
-    return "MCP URL copied";
-  },
-};
+  value: fixtureOptions.has("dynamic-resource")
+    ? (page) =>
+        new URL(
+          `/api/mcp?from=${encodeURIComponent(page.canonicalUrl.pathname)}`,
+          page.canonicalUrl,
+        )
+    : "https://docs.luma.dev/api/mcp",
+});
 
 const config = defineConfig({
   pageTitle: "Create your first client",
@@ -98,8 +97,35 @@ const config = defineConfig({
         }),
         markdownAction,
         mcp,
+        ...(fixtureOptions.has("unsafe-resource")
+          ? [
+              openUrl({
+                id: "unsafe",
+                label: "Unsafe",
+                url: "javascript:alert(1)",
+              }),
+            ]
+          : []),
       ],
     },
+    ...(fixtureOptions.has("custom-open")
+      ? [
+          {
+            id: "resource-links",
+            kind: "primary" as const,
+            actions: [
+              openUrl({
+                id: "source-link",
+                label: "Source repository",
+                description: "Inspect the implementation",
+                icon: false,
+                closeOnSelect: false,
+                url: "https://github.com/ITZSHOAIB/docs-ai-island",
+              }),
+            ],
+          },
+        ]
+      : []),
   ],
   onEvent(event) {
     if (event.type === "action-error") {

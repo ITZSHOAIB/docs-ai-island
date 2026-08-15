@@ -207,6 +207,68 @@ test("resolves the Markdown URL from current SPA page context", async ({ page })
   );
 });
 
+test("copies a literal resource with specific feedback", async ({ page }) => {
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "MCP" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "https://docs.luma.dev/api/mcp",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("MCP copied");
+  await expect(island).toHaveAttribute("data-state", "open");
+});
+
+test("resolves a dynamic resource from current SPA page context", async ({ page }) => {
+  await page.goto("/?dynamic-resource");
+  await page.evaluate(() => {
+    history.pushState({}, "", "/guides/routing");
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = "http://127.0.0.1:4173/guides/routing";
+  });
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "MCP" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "http://127.0.0.1:4173/api/mcp?from=%2Fguides%2Frouting",
+  );
+});
+
+test("rejects non-HTTP resource protocols before navigation", async ({ page }) => {
+  await page.goto("/?unsafe-resource");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Unsafe" }).click();
+
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-opened-url", /.+/);
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-event", "action-error");
+});
+
+test("preserves ordinary Action customization on URL resources", async ({ page }) => {
+  await page.goto("/?custom-open");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  const action = island.locator('[data-action-id="source-link"]');
+  await expect(action.locator('[data-part="action-label"]')).toHaveText("Source repository");
+  await expect(action.locator('[data-part="action-description"]')).toHaveText(
+    "Inspect the implementation",
+  );
+  await expect(action.locator('[data-part="icon-frame"]')).toHaveCount(0);
+
+  await action.click();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-opened-url",
+    "https://github.com/ITZSHOAIB/docs-ai-island",
+  );
+  await expect(island).toHaveAttribute("data-state", "open");
+});
+
 test("has no automatically detectable accessibility violations", async ({ page }) => {
   await page.getByRole("button", { name: "Ask AI" }).click();
   const results = await new AxeBuilder({ page }).include("[data-docs-ai-island]").analyze();

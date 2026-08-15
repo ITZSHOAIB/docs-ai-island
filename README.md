@@ -91,6 +91,29 @@ Non-success and network failures report an Action error and do not copy response
 
 `viewMarkdown()` accepts only a viewable source such as `markdownSource()`. It opens the source URL in an independent window with `noopener,noreferrer` and resolves dynamic URLs from current page context when selected.
 
+### Add generic resources
+
+Use generic factories for MCP endpoints, `llms.txt`, installation commands, source repositories, or support links. Nothing is inferred or generated:
+
+```ts
+import { copyResource, openUrl } from "docs-ai-island";
+
+const resources = [
+  copyResource({
+    id: "mcp",
+    label: "MCP URL",
+    value: (page) => new URL("/api/mcp", page.canonicalUrl),
+  }),
+  openUrl({
+    id: "source",
+    label: "Source repository",
+    url: "https://github.com/ITZSHOAIB/docs-ai-island",
+  }),
+];
+```
+
+Resource values may be literals or functions of current Page Context. URL clipboard values serialize to `href`; `openUrl()` accepts only HTTP(S) destinations.
+
 ## VitePress
 
 The repository includes a production-built VitePress 1.6 fixture that uses the public package API. Extend the default theme, mount the island from the `layout-bottom` slot, and keep the controller alive across client-side navigation:

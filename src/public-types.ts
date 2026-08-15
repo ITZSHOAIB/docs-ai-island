@@ -158,3 +158,21 @@ export interface DocsAiViewMarkdownOptions {
   readonly label?: string;
   readonly description?: string;
 }
+
+export interface DocsAiCopyResourceOptions {
+  readonly id: string;
+  readonly label: string;
+  readonly value: string | URL | ((page: DocsAiIslandPageContext) => MaybePromise<string | URL>);
+  readonly description?: string;
+  readonly icon?: DocsAiIslandIcon;
+  readonly closeOnSelect?: boolean;
+}
+
+export interface DocsAiOpenUrlOptions {
+  readonly id: string;
+  readonly label: string;
+  readonly url: string | URL | ((page: DocsAiIslandPageContext) => MaybePromise<string | URL>);
+  readonly description?: string;
+  readonly icon?: DocsAiIslandIcon;
+  readonly closeOnSelect?: boolean;
+}

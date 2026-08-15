@@ -1,6 +1,7 @@
 import {
   chatgpt,
   copyPage,
+  copyResource,
   type DocsAiIslandAction,
   type DocsAiIslandContentSource,
   type DocsAiIslandController,
@@ -8,6 +9,7 @@ import {
   defineContentSource,
   markdownSource,
   mountDocsAiIsland,
+  openUrl,
   viewMarkdown,
 } from "../src/index.ts";
 
@@ -37,12 +39,31 @@ const remoteCopyAction: DocsAiIslandAction = copyPage({
 const viewMarkdownAction: DocsAiIslandAction = viewMarkdown({ source: remoteMarkdown });
 // @ts-expect-error Callback-only content sources do not declare a viewable URL.
 viewMarkdown({ source: contentContract });
+const copyResourceAction: DocsAiIslandAction = copyResource({
+  id: "llms-txt",
+  label: "Copy llms.txt",
+  value: (page) => new URL("/llms.txt", page.canonicalUrl),
+});
+const openResourceAction: DocsAiIslandAction = openUrl({
+  id: "source",
+  label: "Source",
+  url: "https://github.com/ITZSHOAIB/docs-ai-island",
+  closeOnSelect: false,
+});
 
 const config = defineConfig({
   groups: [
     {
       id: "main",
-      actions: [chatgpt(), action, copyAction, remoteCopyAction, viewMarkdownAction],
+      actions: [
+        chatgpt(),
+        action,
+        copyAction,
+        remoteCopyAction,
+        viewMarkdownAction,
+        copyResourceAction,
+        openResourceAction,
+      ],
     },
   ],
   appearance: { placement: "bottom-right", density: "comfortable" },

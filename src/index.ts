@@ -2,9 +2,11 @@ import { createController } from "./core/controller.ts";
 import type { DocsAiIslandConfig, DocsAiIslandController } from "./public-types.ts";
 
 export { copyPage, defineContentSource, markdownSource, viewMarkdown } from "./actions/content.ts";
+export { copyResource, openUrl } from "./actions/resources.ts";
 export { chatgpt, claude } from "./actions/targets.ts";
 export type {
   DocsAiCopyPageOptions,
+  DocsAiCopyResourceOptions,
   DocsAiIslandAction,
   DocsAiIslandActionContext,
   DocsAiIslandActionGroup,
@@ -28,6 +30,7 @@ export type {
   DocsAiIslandThemeTokens,
   DocsAiIslandViewableContentSource,
   DocsAiMarkdownSourceOptions,
+  DocsAiOpenUrlOptions,
   DocsAiTargetOptions,
   DocsAiViewMarkdownOptions,
 } from "./public-types.ts";
