@@ -1,7 +1,7 @@
 import { createController } from "./core/controller.ts";
 import type { DocsAiIslandConfig, DocsAiIslandController } from "./public-types.ts";
 
-export { copyPage, defineContentSource } from "./actions/content.ts";
+export { copyPage, defineContentSource, markdownSource } from "./actions/content.ts";
 export { chatgpt, claude } from "./actions/targets.ts";
 export type {
   DocsAiCopyPageOptions,
@@ -26,6 +26,8 @@ export type {
   DocsAiIslandPlacement,
   DocsAiIslandTheme,
   DocsAiIslandThemeTokens,
+  DocsAiIslandViewableContentSource,
+  DocsAiMarkdownSourceOptions,
   DocsAiTargetOptions,
 } from "./public-types.ts";
 

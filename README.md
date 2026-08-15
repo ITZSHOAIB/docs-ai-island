@@ -58,6 +58,31 @@ island.update({ appearance: { placement: "bottom-right" } });
 island.destroy();
 ```
 
+### Copy exact page content
+
+Content is an explicit, reusable capability. A custom source can return existing Markdown or text; `markdownSource()` fetches a URL only after the reader invokes the Action:
+
+```ts
+import { copyPage, defineConfig, markdownSource, mountDocsAiIsland } from "docs-ai-island";
+
+const markdown = markdownSource({
+  url: (page) => new URL(`/raw${page.canonicalUrl.pathname}.md`, page.canonicalUrl),
+});
+
+mountDocsAiIsland(
+  defineConfig({
+    groups: [
+      {
+        id: "page",
+        actions: [copyPage({ source: markdown })],
+      },
+    ],
+  }),
+);
+```
+
+Non-success and network failures report an Action error and do not copy response bodies. Set `fallback: "copy-url"` on `copyPage()` only when copying the canonical link is an acceptable, explicit fallback.
+
 ## VitePress
 
 The repository includes a production-built VitePress 1.6 fixture that uses the public package API. Extend the default theme, mount the island from the `layout-bottom` slot, and keep the controller alive across client-side navigation:

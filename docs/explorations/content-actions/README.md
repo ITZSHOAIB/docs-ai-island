@@ -1,6 +1,6 @@
 # Content and built-in Actions exploration
 
-Status: active; contract approved and Phase 1 complete
+Status: active; contract approved and Phases 1–2 complete
 
 Prepared: 2026-08-15
 
@@ -63,7 +63,7 @@ The browser clipboard is an asynchronous secure-context boundary and may reject 
 | --- | --- | --- |
 | 0 | [`00-contract.md`](./00-contract.md) | Complete: public shape and priority approved |
 | 1 | [`01-copy-page.md`](./01-copy-page.md) | Complete: exact Markdown copies lazily through public API |
-| 2 | [`02-markdown-source.md`](./02-markdown-source.md) | URL-backed source, failure, and explicit fallback work |
+| 2 | [`02-markdown-source.md`](./02-markdown-source.md) | Complete: URL source, failure, and explicit fallback work |
 | 3 | [`03-view-markdown.md`](./03-view-markdown.md) | Only an explicit viewable source can open Markdown |
 | 4 | [`04-resource-actions.md`](./04-resource-actions.md) | Generic copy/open resource factories work |
 | 5 | [`05-lifecycle-and-safety.md`](./05-lifecycle-and-safety.md) | Denial, cancellation, privacy, and cleanup are reliable |

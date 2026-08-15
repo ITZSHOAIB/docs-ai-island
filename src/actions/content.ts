@@ -1,8 +1,20 @@
 import type {
   DocsAiCopyPageOptions,
   DocsAiIslandAction,
+  DocsAiIslandContent,
   DocsAiIslandContentSource,
+  DocsAiIslandPageContext,
+  DocsAiIslandViewableContentSource,
+  DocsAiMarkdownSourceOptions,
 } from "../public-types.ts";
+
+function resolveMarkdownUrl(
+  value: DocsAiMarkdownSourceOptions["url"],
+  page: DocsAiIslandPageContext,
+): URL {
+  const resolved = typeof value === "function" ? value(page) : value;
+  return new URL(resolved instanceof URL ? resolved.href : resolved, page.canonicalUrl);
+}
 
 export function defineContentSource<const Source extends DocsAiIslandContentSource>(
   source: Source,
@@ -18,9 +30,32 @@ export function copyPage(options: DocsAiCopyPageOptions): DocsAiIslandAction {
     icon: "copy",
     closeOnSelect: false,
     async onSelect({ clipboard, page, signal }) {
-      const content = await options.source.read({ page, signal });
+      let content: DocsAiIslandContent;
+      try {
+        content = await options.source.read({ page, signal });
+      } catch (error) {
+        if (options.fallback !== "copy-url") throw error;
+        await clipboard.writeText(page.canonicalUrl.href);
+        return "Page link copied";
+      }
       await clipboard.writeText(content.value);
       return content.kind === "markdown" ? "Markdown copied" : "Page content copied";
+    },
+  };
+}
+
+export function markdownSource(
+  options: DocsAiMarkdownSourceOptions,
+): DocsAiIslandViewableContentSource {
+  return {
+    viewUrl: (page) => resolveMarkdownUrl(options.url, page),
+    async read({ page, signal }) {
+      const sourceUrl = resolveMarkdownUrl(options.url, page);
+      const response = await fetch(sourceUrl, { signal });
+      if (!response.ok) {
+        throw new TypeError(`Markdown request failed with status ${response.status}`);
+      }
+      return { kind: "markdown", value: await response.text(), sourceUrl };
     },
   };
 }

@@ -1,5 +1,7 @@
 # Phase 2: URL-backed Markdown Source
 
+Status: complete
+
 ## User behavior
 
 A maintainer supplies a function that resolves the current page to an existing Markdown URL. The package fetches it on demand, treats non-success HTTP responses as failure, and never guesses a route.
@@ -24,3 +26,7 @@ The helper returns both `read()` and `viewUrl()`. Authenticated or non-HTTP sour
 ## Exit gate
 
 Exact Markdown, HTTP failure, network failure, and explicit URL fallback are independently verified through public behavior.
+
+## Result
+
+`markdownSource()` lazily resolves the current Page Context to a URL, forwards the Action signal to `fetch`, rejects non-success responses, and preserves empty successful content. `copyPage({ fallback: "copy-url" })` is the only path that turns a source failure into a canonical-link copy.

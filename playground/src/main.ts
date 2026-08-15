@@ -6,6 +6,7 @@ import {
   type DocsAiIslandAppearance,
   defineConfig,
   defineContentSource,
+  markdownSource,
   mountDocsAiIsland,
 } from "../../src/index.ts";
 import "../../src/styles/index.css";
@@ -29,7 +30,7 @@ async function copy(value: string): Promise<void> {
 }
 
 document.documentElement.dataset.fixtureContentReads = "0";
-const pageContent = defineContentSource({
+const inlineContent = defineContentSource({
   read: () => {
     document.documentElement.dataset.fixtureContentReads = String(
       Number(document.documentElement.dataset.fixtureContentReads) + 1,
@@ -40,6 +41,11 @@ const pageContent = defineContentSource({
     };
   },
 });
+const remoteContent = markdownSource({
+  url: () => new URL("/content/getting-started.md", window.location.origin),
+});
+const fixtureOptions = new URLSearchParams(window.location.search);
+const pageContent = fixtureOptions.has("remote-content") ? remoteContent : inlineContent;
 
 const markdown: DocsAiIslandAction = {
   id: "markdown",
@@ -72,11 +78,21 @@ const config = defineConfig({
     {
       id: "page-tools",
       kind: "utility",
-      actions: [copyPage({ source: pageContent }), markdown, mcp],
+      actions: [
+        copyPage({
+          source: pageContent,
+          ...(fixtureOptions.has("copy-url-fallback") ? { fallback: "copy-url" as const } : {}),
+        }),
+        markdown,
+        mcp,
+      ],
     },
   ],
   onEvent(event) {
-    if (event.type === "action-error") showToast("That action is unavailable in this preview");
+    if (event.type === "action-error") {
+      document.documentElement.dataset.fixtureEvent = event.type;
+      showToast("That action is unavailable in this preview");
+    }
   },
 });
 

@@ -79,6 +79,89 @@ test("does not read page content until the reader invokes the Action", async ({ 
   await expect(page.locator("html")).toHaveAttribute("data-fixture-content-reads", "1");
 });
 
+test("copies Markdown fetched from the configured source URL", async ({ page }) => {
+  await page.route("**/content/getting-started.md", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "text/markdown",
+      body: "# URL source\n\nFetched on demand.",
+    });
+  });
+  await page.goto("/?remote-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "# URL source\n\nFetched on demand.",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("Markdown copied");
+});
+
+test("reports an unavailable Markdown response without copying it", async ({ page }) => {
+  await page.route("**/content/getting-started.md", async (route) => {
+    await route.fulfill({ status: 404, contentType: "text/plain", body: "Not found" });
+  });
+  await page.goto("/?remote-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-event", "action-error");
+  await expect(island.locator('[data-part="live-region"]')).toHaveText(
+    "Copy page for AI could not be opened",
+  );
+});
+
+test("reports a Markdown network failure without copying content", async ({ page }) => {
+  await page.route("**/content/getting-started.md", async (route) => {
+    await route.abort("failed");
+  });
+  await page.goto("/?remote-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-event", "action-error");
+});
+
+test("copies the canonical URL only when its fallback is configured", async ({ page }) => {
+  await page.route("**/content/getting-started.md", async (route) => {
+    await route.fulfill({ status: 503, contentType: "text/plain", body: "Unavailable" });
+  });
+  await page.goto("/?remote-content&copy-url-fallback");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "http://127.0.0.1:4173/getting-started/client",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("Page link copied");
+});
+
+test("treats an empty successful Markdown response as exact content", async ({ page }) => {
+  await page.route("**/content/getting-started.md", async (route) => {
+    await route.fulfill({ status: 200, contentType: "text/markdown", body: "" });
+  });
+  await page.goto("/?remote-content");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-clipboard", "");
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("Markdown copied");
+});
+
 test("has no automatically detectable accessibility violations", async ({ page }) => {
   await page.getByRole("button", { name: "Ask AI" }).click();
   const results = await new AxeBuilder({ page }).include("[data-docs-ai-island]").analyze();

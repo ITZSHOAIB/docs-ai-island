@@ -6,6 +6,7 @@ import {
   type DocsAiIslandController,
   defineConfig,
   defineContentSource,
+  markdownSource,
   mountDocsAiIsland,
 } from "../src/index.ts";
 
@@ -25,9 +26,16 @@ const content = defineContentSource({
 });
 const contentContract: DocsAiIslandContentSource = content;
 const copyAction: DocsAiIslandAction = copyPage({ source: contentContract });
+const remoteMarkdown = markdownSource({
+  url: (page) => new URL(`/raw${page.canonicalUrl.pathname}.md`, page.canonicalUrl),
+});
+const remoteCopyAction: DocsAiIslandAction = copyPage({
+  source: remoteMarkdown,
+  fallback: "copy-url",
+});
 
 const config = defineConfig({
-  groups: [{ id: "main", actions: [chatgpt(), action, copyAction] }],
+  groups: [{ id: "main", actions: [chatgpt(), action, copyAction, remoteCopyAction] }],
   appearance: { placement: "bottom-right", density: "comfortable" },
   theme: { menuRadius: "14px", accent: "rebeccapurple" },
 });

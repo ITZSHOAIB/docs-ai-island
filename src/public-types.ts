@@ -37,6 +37,10 @@ export interface DocsAiIslandContentSource {
   read(context: DocsAiIslandContentReadContext): MaybePromise<DocsAiIslandContent>;
 }
 
+export interface DocsAiIslandViewableContentSource extends DocsAiIslandContentSource {
+  viewUrl(page: DocsAiIslandPageContext): URL;
+}
+
 export interface DocsAiIslandClipboard {
   writeText(value: string): Promise<void>;
 }
@@ -140,6 +144,11 @@ export interface DocsAiTargetOptions {
 
 export interface DocsAiCopyPageOptions {
   readonly source: DocsAiIslandContentSource;
+  readonly fallback?: "error" | "copy-url";
   readonly label?: string;
   readonly description?: string;
+}
+
+export interface DocsAiMarkdownSourceOptions {
+  readonly url: string | URL | ((page: DocsAiIslandPageContext) => string | URL);
 }
