@@ -36,7 +36,7 @@ Publishing is intentionally disabled during development. CI validates pushes to 
 
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
-The content-Action epic is active. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) splits explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and VitePress proof into six vertical phases. ADR 0003 is accepted. Phases 1–5 now ship lazy custom/URL sources, `copyPage()`, honest HTTP/network failure, opt-in canonical-URL fallback, `viewMarkdown()` with action-time Page Context, generic copy/open resource Actions, and operation-scoped cancellation and event privacy.
+The content-Action epic is complete. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) records six vertical phases covering explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and the VitePress proof. ADR 0003 is accepted. The pilot now ships lazy custom/URL sources, `copyPage()`, honest HTTP/network failure, opt-in canonical-URL fallback, `viewMarkdown()` with action-time Page Context, generic copy/open resource Actions, operation-scoped cancellation and event privacy, and exact copy/view validation in workspace and packed VitePress consumers.
 
 ## Naming validation
 
@@ -696,7 +696,7 @@ Progress: the repository foundation, controller, page URL/title context, default
 
 Exit gate: all fixture production builds and route-change tests pass.
 
-Progress: the VitePress 1.6 recipe and fixture are complete. They cover production/SSR build, public-package mounting, canonical handoff, SPA route refresh without remounting, host theme synchronization, floating-control coexistence, mobile gutters, accessibility, and a packed-tarball consumer build. Starlight/Astro and Docusaurus remain; content-source cases wait on the Phase 1 content factories.
+Progress: the VitePress 1.6 recipe and fixture are complete. They cover production/SSR build, public-package mounting, canonical handoff, SPA route refresh without remounting, exact copy/view Markdown across routes, honest missing-asset failure, host theme synchronization, floating-control coexistence, mobile gutters, accessibility, and a packed-tarball consumer build. Starlight/Astro and Docusaurus remain.
 
 ### Phase 3 — beta hardening
 

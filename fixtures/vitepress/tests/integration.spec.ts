@@ -2,6 +2,23 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText(value: string) {
+          document.documentElement.dataset.fixtureClipboard = value;
+          return Promise.resolve();
+        },
+      },
+    });
+    window.open = (url, target, features) => {
+      document.documentElement.dataset.fixtureOpenedUrl = String(url);
+      document.documentElement.dataset.fixtureOpenedTarget = target ?? "";
+      document.documentElement.dataset.fixtureOpenedFeatures = features ?? "";
+      return null;
+    };
+  });
   await page.goto("/guide/getting-started");
 });
 
@@ -10,6 +27,18 @@ test("mounts one island through the public package API", async ({ page }) => {
   await expect(island).toHaveCount(1);
   await expect(island).toHaveAttribute("data-placement", "bottom-center");
   await expect(island).toHaveCSS("--docs-ai-island-accent", "#5b5bd6");
+});
+
+test("copies exact Markdown declared by the VitePress fixture", async ({ page }) => {
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "# Getting started\n\nInstall with `pnpm add @northstar/sdk`.\n",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("Markdown copied");
 });
 
 test("refreshes page context after client-side navigation without remounting", async ({ page }) => {
@@ -34,15 +63,51 @@ test("refreshes page context after client-side navigation without remounting", a
   );
 });
 
-test("hands the active canonical page to an AI target", async ({ page }) => {
-  await page.addInitScript(() => {
-    window.open = (url) => {
-      document.documentElement.dataset.fixtureOpenedUrl = String(url);
-      return null;
-    };
-  });
-  await page.reload();
+test("changes copied content and viewed Markdown after SPA navigation", async ({ page }) => {
   await page.getByRole("link", { name: "Client options" }).first().click();
+  await expect(page).toHaveURL(/\/reference\/options$/);
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "# Client options\n\nUse `timeout` and `retries` to tune the client.\n",
+  );
+
+  await island.getByRole("button", { name: "View as Markdown" }).click();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-opened-url",
+    "http://127.0.0.1:4174/content/reference/options.md",
+  );
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-opened-features",
+    "noopener,noreferrer",
+  );
+});
+
+test("reports a missing route Markdown asset without false copy success", async ({ page }) => {
+  await page.goto("/guide/long-page");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(island).toHaveAttribute("data-action-status", "error");
+  await expect(island.locator('[data-part="live-region"]')).toHaveText(
+    "Copy page for AI could not be opened",
+  );
+});
+
+test("hands the active canonical page to an AI target", async ({ page }) => {
+  await page.getByRole("link", { name: "Client options" }).first().click();
+  await expect(page).toHaveURL(/\/reference\/options$/);
+  await expect(page.locator(".VPDoc h1")).toHaveText("Client options");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://docs.northstar.example/reference/client-options",
+  );
   await page.getByRole("button", { name: "Ask AI" }).click();
   await page.locator('[data-action-id="chatgpt"]').click();
 

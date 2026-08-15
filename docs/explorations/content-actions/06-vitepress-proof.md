@@ -1,5 +1,7 @@
 # Phase 6: VitePress content proof
 
+Status: complete
+
 ## Goal
 
 Prove that the framework-neutral public primitives work in the existing production VitePress fixture without adding a VitePress adapter.
@@ -21,3 +23,7 @@ Prove that the framework-neutral public primitives work in the existing producti
 ## Exit gate
 
 Workspace and packed VitePress consumers exercise exact copy/view behavior across SPA navigation, and the package still ships no Vue or VitePress dependency.
+
+## Result
+
+The fixture declares route-specific files under `public/content/` and maps them with one fixture-owned `markdownSource()`. Nine production browser tests cover exact copy, copy/view changes after SPA navigation, honest missing-asset failure, canonical handoff, theme coexistence, mobile fit, and accessibility. A clean copied consumer installs the tarball and completes a VitePress production build; the published package still has no runtime dependencies.

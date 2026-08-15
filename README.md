@@ -122,11 +122,22 @@ The repository includes a production-built VitePress 1.6 fixture that uses the p
 
 ```ts
 // .vitepress/theme/index.ts
-import { mountDocsAiIsland } from "docs-ai-island";
+import {
+  chatgpt,
+  claude,
+  copyPage,
+  markdownSource,
+  mountDocsAiIsland,
+  viewMarkdown,
+} from "docs-ai-island";
 import "docs-ai-island/styles.css";
 import { type Theme, useData, useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { h, nextTick, onMounted, onUnmounted, watch } from "vue";
+
+const markdown = markdownSource({
+  url: (page) => new URL(`/content${page.url.pathname}.md`, page.url),
+});
 
 const DocsAiIslandBridge = {
   setup() {
@@ -137,6 +148,14 @@ const DocsAiIslandBridge = {
     onMounted(() => {
       island = mountDocsAiIsland({
         appearance: { colorScheme: isDark.value ? "dark" : "light" },
+        groups: [
+          { id: "assistants", actions: [chatgpt(), claude()] },
+          {
+            id: "page",
+            kind: "utility",
+            actions: [copyPage({ source: markdown }), viewMarkdown({ source: markdown })],
+          },
+        ],
         theme: {
           accent: "var(--vp-c-brand-1)",
           fontFamily: "var(--vp-font-family-base)",
@@ -165,7 +184,7 @@ export default {
 } satisfies Theme;
 ```
 
-See the [complete VitePress fixture](./fixtures/vitepress/) for canonical URL generation, custom actions, host-theme styling, and browser tests. Run it with `pnpm test:fixture:vitepress`; `pnpm test:fixture:vitepress:pack` also installs the packed tarball into a clean copied consumer and runs its production build.
+The example deliberately maps route paths to fixture-owned public Markdown assets; adapt that explicit mapping to the content pipeline your site already exposes. See the [complete VitePress fixture](./fixtures/vitepress/) for exact copy/view behavior, canonical URL generation, custom actions, host-theme styling, and browser tests. Run it with `pnpm test:fixture:vitepress`; `pnpm test:fixture:vitepress:pack` also installs the packed tarball into a clean copied consumer and runs its production build.
 
 ## Customization
 

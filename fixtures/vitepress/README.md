@@ -7,6 +7,8 @@ The fixture proves:
 - extension of the default VitePress theme through `layout-bottom`;
 - one island instance across client-side route changes;
 - canonical URL and page-title refresh through the public controller;
+- exact Markdown copy/view from fixture-owned static assets across route changes;
+- honest failure when a route has no declared Markdown asset;
 - synchronization with VitePress light and dark modes;
 - coexistence with an unrelated floating support control;
 - mobile viewport fit and automated accessibility checks;
@@ -19,4 +21,4 @@ pnpm test:fixture:vitepress
 pnpm test:fixture:vitepress:pack
 ```
 
-The bridge lives in [`.vitepress/theme/index.ts`](./.vitepress/theme/index.ts), canonical links are generated in [`.vitepress/config.ts`](./.vitepress/config.ts), and browser expectations live in [`tests/integration.spec.ts`](./tests/integration.spec.ts).
+The bridge lives in [`.vitepress/theme/index.ts`](./.vitepress/theme/index.ts), canonical links are generated in [`.vitepress/config.ts`](./.vitepress/config.ts), explicit Markdown assets live under [`public/content/`](./public/content/guide/getting-started.md), and browser expectations live in [`tests/integration.spec.ts`](./tests/integration.spec.ts).

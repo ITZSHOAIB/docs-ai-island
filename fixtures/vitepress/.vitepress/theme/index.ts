@@ -1,10 +1,22 @@
-import { chatgpt, claude, type DocsAiIslandController, mountDocsAiIsland } from "docs-ai-island";
+import {
+  chatgpt,
+  claude,
+  copyPage,
+  type DocsAiIslandController,
+  markdownSource,
+  mountDocsAiIsland,
+  viewMarkdown,
+} from "docs-ai-island";
 import { type Theme, useData, useRoute } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import { h, nextTick, onMounted, onUnmounted, watch } from "vue";
 import "vitepress/dist/client/theme-default/styles/vars.css";
 import "docs-ai-island/styles.css";
 import "./style.css";
+
+const markdown = markdownSource({
+  url: (page) => new URL(`/content${page.url.pathname}.md`, page.url),
+});
 
 const DocsAiIslandBridge = {
   setup() {
@@ -29,6 +41,8 @@ const DocsAiIslandBridge = {
             id: "fixture-tools",
             kind: "utility",
             actions: [
+              copyPage({ source: markdown }),
+              viewMarkdown({ source: markdown }),
               {
                 id: "capture-route",
                 label: "Capture route",

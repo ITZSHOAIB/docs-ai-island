@@ -95,7 +95,7 @@ The two primary seams are the exported package API and the rendered island in a 
 - Package tests cover export maps, packed contents, ESM resolution, and import without DOM globals.
 - Playwright tests cover menu behavior, keyboard navigation, focus restoration, runtime customization, mobile fit, accessibility, and approved visual baselines.
 - Size Limit enforces separate JavaScript and CSS budgets.
-- Framework fixtures consume the package through its public entry points and exercise production builds and route changes. The VitePress fixture additionally validates theme coexistence, canonical handoff, mobile fit, axe results, and a clean packed-tarball consumer build; the remaining framework fixtures are pending.
+- Framework fixtures consume the package through its public entry points and exercise production builds and route changes. The VitePress fixture additionally validates exact copy/view Markdown across routes, honest missing-asset failure, theme coexistence, canonical handoff, mobile fit, axe results, and a clean packed-tarball consumer build; the remaining framework fixtures are pending.
 
 ## Non-Functional Requirements
 

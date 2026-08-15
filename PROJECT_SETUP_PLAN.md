@@ -32,7 +32,7 @@ The exact package name returned `E404` from npm and no exact-name GitHub reposit
 | Package validation | Complete for pilot | Publint, Are the Types Wrong ESM profile, packed-content/SSR import checks, and Brotli size budgets pass locally. |
 | Customization contract | Partial | Semantic options, messages, icons, tokens, stable parts, placements, densities, and unstyled use exist; generated reference, RTL, hostile CSS, and long-label coverage remain. |
 | Page actions and context | Partial | Canonical URL/title context, custom actions, events, ChatGPT/Claude, custom and URL Markdown sources, lazy `copyPage()`, and explicit fallback exist. View/resource factories and lifecycle hardening remain. |
-| Content and route lifecycle | Partial | The VitePress recipe refreshes page context through `controller.update()` on route changes; explicit content sources, fallback experiments, visibility, and cancellation across updates remain. |
+| Content and route lifecycle | Partial | Explicit custom/URL sources, copy/view/resource Actions, fallback behavior, operation cancellation, and VitePress route-specific content pass; visibility and page opt-out remain. |
 | Framework proof | Partial | VitePress 1.6 production, browser, theme, SPA, canonical, mobile, accessibility, and packed-tarball checks pass. Plain packed HTML, Starlight/Astro, and Docusaurus fixtures remain. |
 | Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, and CI exist. Publishing is intentionally disabled; Vocs docs, reference docs, release approval, provenance setup, and real-site validation remain. |
 
@@ -539,7 +539,7 @@ Exit: every documented token/part has a test; no production CSS relies on the pr
 - Add context resolution, visibility, ChatGPT/Claude targets, clipboard Actions, resource Actions, events, validation, and privacy safeguards.
 - Keep content lazy and test target URL contracts.
 
-Current checkpoint: [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) defines the vertical RED→GREEN slices. ADR 0003 is accepted. Phases 1–5 implement explicit custom/URL Content Sources, lazy copy/view/resource Actions, explicit failure/fallback, current Page Context, operation-scoped cancellation, cleanup, and event privacy; the remaining phase adds the packed-consumer proof.
+Current checkpoint: [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) records the six completed vertical RED→GREEN slices. ADR 0003 is accepted. They implement explicit custom/URL Content Sources, lazy copy/view/resource Actions, explicit failure/fallback, current Page Context, operation-scoped cancellation, cleanup, event privacy, and workspace plus packed-consumer VitePress proof.
 
 Exit: the package is useful with zero configuration and remains network-idle until a user acts.
 
@@ -555,7 +555,7 @@ Exit: plain HTML and SPA navigation produce fresh Page Context without remount l
 - Implement fixture-tested recipes for VitePress, Starlight, generic Astro, and Docusaurus.
 - Do not publish adapters unless at least two fixtures require the same non-trivial bridge and real users validate it.
 
-Progress: VitePress is complete against 1.6.4 with Vue 3.5.41. The fixture extends the default theme, mounts through `layout-bottom`, synchronizes route and theme changes without remounting, and validates both workspace and packed-tarball consumption. Starlight, generic Astro, and Docusaurus remain.
+Progress: VitePress is complete against 1.6.4 with Vue 3.5.41. The fixture extends the default theme, mounts through `layout-bottom`, synchronizes route and theme changes without remounting, exercises exact copy/view sources and missing-asset failure, and validates both workspace and packed-tarball consumption. Starlight, generic Astro, and Docusaurus remain.
 
 Exit: every fixture’s production build and E2E suite pass.
 
