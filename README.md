@@ -73,7 +73,13 @@ Styles are never injected by JavaScript. Omit the stylesheet to own the presenta
 
 This is a handoff surface, not an embedded chatbot. It does not generate answers, crawl a site, build embeddings, store API keys, or send page content anywhere at mount time. External navigation happens only after a user selects an action.
 
-See [PLAN.md](./PLAN.md) for product boundaries and [PROJECT_SETUP_PLAN.md](./PROJECT_SETUP_PLAN.md) for the implementation roadmap.
+Project decisions are maintained in the repository:
+
+- [PRD](./docs/PRD.md) for requirements, current scope, and release acceptance;
+- [product and implementation plan](./PLAN.md) for research, positioning, risks, and phases;
+- [project setup plan](./PROJECT_SETUP_PLAN.md) for tooling, quality gates, and implementation progress;
+- [architecture decisions](./docs/adr/) for accepted technical choices;
+- [project document index](./docs/) for the maintenance convention.
 
 ## License
 

@@ -1,7 +1,8 @@
 # Docs AI Island: Project Setup Plan
 
-Status: ready for implementation
+Status: foundation and Option A vertical slice implemented; later phases active
 Prepared: 2026-08-15
+Last implementation reconciliation: 2026-08-15
 Package: `docs-ai-island`
 UI baseline: Option A, **Quiet Glass III**
 
@@ -21,6 +22,21 @@ Create one small, ESM-only, framework-neutral browser library with:
 The repository should remain a **single publishable package at the root**. `docs`, `playground`, and fixture applications are pnpm workspace projects but are never published. Do not create adapter packages until repeated real-world integration logic proves they are needed.
 
 The package name was not present on npm when checked on 2026-08-15. Availability must be checked again immediately before publishing.
+
+## Current progress
+
+| Area | Status | Evidence or remaining work |
+| --- | --- | --- |
+| Repository foundation | Complete | Root package, pnpm workspace, strict TypeScript, Biome, tsdown, Lightning CSS, Changesets, hooks, package metadata, and pinned lockfile are present. |
+| Option A vertical slice | Complete | Quiet Glass production UI, controller, defaults, customization, playground, desktop/mobile snapshots, keyboard tests, and axe coverage are present. |
+| Package validation | Complete for pilot | Publint, Are the Types Wrong ESM profile, packed-content/SSR import checks, and Brotli size budgets pass locally. |
+| Customization contract | Partial | Semantic options, messages, icons, tokens, stable parts, placements, densities, and unstyled use exist; generated reference, RTL, hostile CSS, and long-label coverage remain. |
+| Page actions and context | Partial | Canonical URL/title context, custom actions, events, and ChatGPT/Claude targets exist; copy/view/resource factories, visibility, validation, and privacy guidance remain. |
+| Content and route lifecycle | Not started | Explicit content sources, fallback experiments, cancellation across updates, and SPA navigation recipes remain. |
+| Framework proof | Not started | Plain packaged fixture plus VitePress, Starlight/Astro, and Docusaurus production fixtures remain. |
+| Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, CI, and publish workflow exist; Vocs site, reference docs, prerelease, provenance verification, and real-site validation remain. |
+
+The current local pilot commit is `27ebc99`. Generated build output is not source-of-truth; the documents and tests describe the intended and verified state.
 
 ## Decisions
 
@@ -61,7 +77,7 @@ The package name was not present on npm when checked on 2026-08-15. Availability
 - Add a Vite-powered styling playground instead of developing against the throwaway prototype.
 - Treat visual tokens and stable DOM parts as a public API with tests and documentation.
 
-## Proposed repository
+## Current pilot repository
 
 ```text
 docs-ai-island/
@@ -69,56 +85,36 @@ docs-ai-island/
 │   └── config.json
 ├── .github/
 │   ├── dependabot.yml
+│   ├── pull_request_template.md
 │   └── workflows/
 │       ├── pull-request.yml
 │       ├── checks.yml
-│       ├── codeql.yml
 │       └── publish.yml
 ├── docs/
-│   ├── package.json
-│   ├── vocs.config.ts
-│   └── src/
-├── fixtures/
-│   ├── html/
-│   ├── vitepress/
-│   ├── starlight/
-│   └── docusaurus/
+│   ├── README.md
+│   ├── PRD.md
+│   └── adr/
+│       ├── README.md
+│       ├── 0001-framework-neutral-browser-core.md
+│       └── 0002-light-dom-and-external-css.md
 ├── playground/
 │   ├── index.html
 │   ├── package.json
 │   └── src/
 │       ├── main.ts
 │       └── playground.css
+├── prototype/
 ├── scripts/
-│   ├── check-package.mjs
-│   └── measure-css.mjs
+│   └── check-package.mjs
 ├── src/
 │   ├── actions/
-│   │   ├── chatgpt.ts
-│   │   ├── claude.ts
-│   │   ├── copy-page.ts
-│   │   ├── copy-resource.ts
-│   │   ├── open-url.ts
-│   │   └── view-markdown.ts
-│   ├── content/
-│   │   ├── resolve-content.ts
-│   │   ├── markdown-source.ts
-│   │   └── document-source.ts
-│   ├── context/
-│   │   ├── page-context.ts
-│   │   ├── route-matcher.ts
-│   │   └── visibility.ts
+│   │   └── targets.ts
 │   ├── core/
 │   │   ├── config.ts
 │   │   ├── controller.ts
-│   │   ├── events.ts
 │   │   └── state.ts
 │   ├── ui/
-│   │   ├── island.ts
-│   │   ├── icons.ts
-│   │   ├── keyboard.ts
-│   │   ├── live-region.ts
-│   │   └── render.ts
+│   │   └── icons.ts
 │   ├── styles/
 │   │   ├── index.css
 │   │   ├── tokens.css
@@ -126,32 +122,33 @@ docs-ai-island/
 │   │   ├── components.css
 │   │   └── states.css
 │   ├── index.ts
-│   └── public-types.ts
+│   ├── public-types.ts
+│   └── styles.d.ts
 ├── test/
-│   ├── browser/
 │   ├── e2e/
-│   ├── unit/
-│   └── visual/
+│   │   └── island.spec.ts
+│   └── unit/
 ├── test-dts/
 │   ├── public-api.ts
 │   └── tsconfig.json
 ├── biome.json
 ├── CONTEXT.md
+├── CONTRIBUTING.md
 ├── LICENSE
 ├── package.json
+├── PLAN.md
 ├── playwright.config.ts
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── README.md
+├── PROJECT_SETUP_PLAN.md
 ├── SECURITY.md
-├── tsconfig.build.json
 ├── tsconfig.json
 ├── tsdown.config.ts
-├── vitest.config.ts
 └── vitest.config.ts
 ```
 
-The existing `prototype/` remains outside production imports. It is deleted after the production styling playground reproduces Option A and the visual contract is approved.
+Unimplemented V1 directories are tracked in the progress table and implementation phases rather than represented by empty packages. The existing `prototype/` remains outside production imports as archived design evidence; the production playground now owns visual development and regression coverage.
 
 ## Internal architecture
 
@@ -308,7 +305,7 @@ The playground must expose every public token, semantic option, long-content cas
 
 Versions below were checked on 2026-08-15. Pin exact versions in `package.json` and the lockfile; review them when scaffolding rather than assuming this table remains current.
 
-| Tool | Planned version | Role |
+| Tool | Pilot version or status | Role |
 | --- | ---: | --- |
 | Node.js | 24 LTS for development | Local and primary CI runtime. |
 | pnpm | 11.21.0 | Workspace and package manager. |
@@ -328,9 +325,9 @@ Versions below were checked on 2026-08-15. Pin exact versions in `package.json` 
 | Are the Types Wrong CLI | 0.18.5 | Declaration/module-resolution validation. |
 | Size Limit | 13.0.3 | JavaScript and CSS budgets. |
 | simple-git-hooks | 2.13.1 | Small Git hook installer. |
-| lint-staged | 17.3.0 | Staged-file Biome checks. |
+| lint-staged | Deferred | Add only if staged-file volume makes the current full Biome hook too slow. |
 | rimraf | 6.1.3 | Cross-platform cleanup where the build tool cannot do it. |
-| Vocs | 2.8.5 | Documentation site. |
+| Vocs | Planned | Documentation site work begins after the framework-neutral alpha. |
 
 No runtime dependency is required for the initial scaffold. A document-to-Markdown converter may become a lazy bundled chunk only after the content-source spike measures quality and size.
 
@@ -375,7 +372,7 @@ Lightning CSS:
 - use an explicit browser target fixed by ADR before beta;
 - generate a minified artifact without requiring consumers to run PostCSS.
 
-## Planned scripts
+## Scripts
 
 ```jsonc
 {
@@ -384,23 +381,20 @@ Lightning CSS:
     "build": "pnpm clean && pnpm build:js && pnpm build:css",
     "build:js": "tsdown",
     "build:css": "lightningcss --bundle --sourcemap --minify src/styles/index.css -o dist/styles.css",
-    "clean": "rimraf dist coverage playwright-report test-results",
+    "clean": "rimraf dist playground/dist coverage playwright-report test-results",
     "typecheck": "tsc --noEmit",
     "format": "biome format --write .",
     "lint": "biome ci .",
     "lint:fix": "biome check --write .",
-    "lint:staged": "lint-staged",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:browser": "playwright test",
     "test:e2e": "pnpm build && playwright test",
     "test:types": "tsc -p test-dts/tsconfig.json",
-    "test:package": "pnpm build && publint --pack false --strict && pnpm pack --pack-destination .package && attw .package/*.tgz --profile esm-only --entrypoints . && node scripts/check-package.mjs",
+    "test:package": "pnpm build && publint --pack false --strict && rimraf .package && pnpm pack --pack-destination .package && attw .package/*.tgz --profile esm-only --entrypoints . && node scripts/check-package.mjs",
     "test:size": "pnpm build && size-limit",
-    "docs:dev": "pnpm --dir docs dev",
-    "docs:build": "pnpm build && pnpm --dir docs build",
-    "check": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm test:browser && pnpm test:package && pnpm test:size",
+    "check": "pnpm lint && pnpm typecheck && pnpm test:coverage && pnpm test:types && pnpm test:package && pnpm test:size",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "pnpm build && changeset publish",
@@ -409,7 +403,7 @@ Lightning CSS:
 }
 ```
 
-Exact CLI flags must be confirmed during scaffolding. Avoid adding a dependency solely to run scripts in parallel; CI jobs provide parallelism.
+The repository scripts are implemented with two deliberate pilot differences from the earlier sketch: `pnpm check` runs non-browser package gates while CI runs `pnpm test:browser` as a separate job, and lint-staged is deferred until staged-file volume justifies another dependency. Avoid adding a dependency solely to run scripts in parallel; CI jobs provide parallelism.
 
 ## Package quality gates
 
@@ -427,8 +421,8 @@ The packed tarball must prove:
 
 Initial size budgets:
 
-- root ESM entry with Option A UI: **12 kB gzip maximum**;
-- default CSS: **4 kB gzip maximum**;
+- root ESM entry with Option A UI: **12 kB Brotli maximum**;
+- default CSS: **4 kB Brotli maximum**;
 - a minimal consumer importing only mount plus one custom Action must stay below the full default bundle;
 - lazy document conversion is measured separately and never part of initial load.
 
@@ -516,7 +510,7 @@ CSS variables, stable parts, and default visual behavior are public API. Breakin
 
 ## Implementation sequence
 
-### Phase 0 — Repository foundation
+### Phase 0 — Repository foundation — complete
 
 - Initialize Git/package metadata, license, workspace, Node/pnpm pins, EditorConfig, ignore files, Biome, TypeScript, tsdown, Lightning CSS, Changesets, and Git hooks.
 - Add empty docs, playground, and fixture workspace packages.
@@ -524,7 +518,7 @@ CSS variables, stable parts, and default visual behavior are public API. Breakin
 
 Exit: `pnpm install`, `pnpm lint`, `pnpm typecheck`, `pnpm build`, and `pnpm test:package` pass with a minimal SSR-safe export.
 
-### Phase 1 — Option A vertical slice
+### Phase 1 — Option A vertical slice — complete
 
 - Implement controller, small state model, light-DOM renderer, trigger, menu, two static custom Actions, keyboard behavior, destroy, and default CSS.
 - Reproduce Quiet Glass III in the permanent playground without copying prototype architecture.
@@ -532,7 +526,7 @@ Exit: `pnpm install`, `pnpm lint`, `pnpm typecheck`, `pnpm build`, and `pnpm tes
 
 Exit: one custom Action can be mounted, invoked, styled, updated, and destroyed in plain HTML.
 
-### Phase 2 — Customization contract
+### Phase 2 — Customization contract — in progress
 
 - Finalize semantic appearance options, typed theme tokens, messages, icons, stable parts, RTL, density, placement, mobile behavior, and unstyled use.
 - Generate the token reference from one source of truth.

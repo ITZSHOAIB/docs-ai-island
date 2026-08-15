@@ -1,8 +1,9 @@
 # Docs AI Island: Product and Implementation Plan
 
-Status: accepted for pilot implementation
+Status: pilot vertical slice implemented; V1 planning active
 Research snapshot: 2026-08-14
-Planned package: `docs-ai-island`
+Last implementation reconciliation: 2026-08-15
+Package: `docs-ai-island`
 
 Repository structure, tooling, quality gates, and implementation sequencing are specified in [`PROJECT_SETUP_PLAN.md`](./PROJECT_SETUP_PLAN.md).
 
@@ -22,6 +23,14 @@ The first release will:
 - use one framework-neutral browser core, with installation recipes for VitePress, Starlight/Astro, and Docusaurus.
 
 This is a **handoff Island**, not an embedded chatbot. That distinction should remain explicit in the package description, documentation, UI copy, and types.
+
+## Current implementation snapshot
+
+The first production pilot is implemented and committed. It includes the framework-neutral SSR-safe core, controller lifecycle, zero-config ChatGPT and Claude targets, custom action groups, typed events, the Quiet Glass UI, external cascade-layered CSS, theme tokens, stable DOM parts, a Vite playground, and unit/type/package/size/accessibility/browser/visual checks.
+
+The pilot does **not** yet include built-in copy-page/view-Markdown/resource factories, content-source resolution, route visibility, automatic SPA lifecycle bridges, framework fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
+
+Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
 ## Why this is worth building
 
@@ -573,8 +582,8 @@ Automated checks help, but keyboard and screen-reader smoke tests are release ga
 
 Initial targets, to validate during the spike:
 
-- core ESM plus UI: at most 12 kB gzip;
-- CSS: at most 4 kB gzip;
+- core ESM plus UI: at most 12 kB Brotli;
+- CSS: at most 4 kB Brotli;
 - zero framework runtime bundled;
 - zero network requests before a user activates an Action;
 - document-to-Markdown conversion in a separate lazy chunk;
@@ -629,23 +638,22 @@ For plain HTML, VitePress, Starlight, and Docusaurus:
 - fixture production builds;
 - accessibility scan plus manual keyboard test;
 - package provenance/content inspection;
-- gzip budget report;
+- Brotli budget report;
 - README installation snippets tested from a clean directory.
 
 ## Delivery phases
 
-### Phase 0 — resolve the remaining design questions
+### Phase 0 — resolve the initial design questions — substantially complete
 
-The throwaway browser prototype selected Option A (Quiet Glass III), the `Ask AI` trigger, restrained action grouping, and host-friendly visual inheritance. The implementation spike still needs to answer:
+The throwaway browser prototype selected Option A (Quiet Glass III), the `Ask AI` trigger, restrained action grouping, and host-friendly visual inheritance. The production pilot accepted Light DOM with external CSS and an anchored responsive menu. Remaining investigation:
 
-- anchored menu or mobile sheet behavior;
 - whether document extraction produces acceptable output in three real docs pages.
 
 Light DOM with external, cascade-layered CSS is the implementation recommendation. Revisit it only if hostile-CSS fixture testing shows that prefixing and low-specificity layers are insufficient.
 
-Exit gate: mobile behavior and one content fallback direction are selected.
+Exit gate status: visual and mobile behavior selected; content fallback direction remains open.
 
-### Phase 1 — framework-neutral alpha
+### Phase 1 — framework-neutral alpha — in progress
 
 - initialize package, tooling, license, contribution files, and CI;
 - implement Page Context, Content Source, Action, and event contracts;
@@ -655,6 +663,8 @@ Exit gate: mobile behavior and one content fallback direction are selected.
 - build the plain HTML fixture and browser tests.
 
 Exit gate: a static site can install the package, configure Actions, and pass accessibility/browser tests without a framework runtime.
+
+Progress: the repository foundation, controller, page URL/title context, default AI targets, custom actions, appearance/messages/theme configuration, cleanup, plain playground, and Chromium accessibility/browser tests are complete. Content sources, built-in copy/view/resource actions, visibility, and navigation refresh remain.
 
 ### Phase 2 — integration proof
 
