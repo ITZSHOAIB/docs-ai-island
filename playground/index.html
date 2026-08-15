@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="http://127.0.0.1:4173/getting-started/client" />
+    <title>Create your first client</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Luma documentation home">
+        <span aria-hidden="true">L</span>
+        Luma <small>Docs</small>
+      </a>
+      <nav aria-label="Main navigation">
+        <a class="active" href="#guide">Guides</a>
+        <a href="#api">API</a>
+        <a href="#examples">Examples</a>
+      </nav>
+      <button class="search" type="button">Search documentation <kbd>⌘ K</kbd></button>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar" aria-label="Documentation">
+        <p>GET STARTED</p>
+        <a href="#overview">Introduction</a>
+        <a class="active" href="#client">Create a client</a>
+        <a href="#authentication">Authentication</a>
+        <p>CORE CONCEPTS</p>
+        <a href="#requests">Requests</a>
+        <a href="#errors">Errors</a>
+        <a href="#webhooks">Webhooks</a>
+      </aside>
+
+      <main>
+        <article>
+          <div class="crumbs">Guides <span>/</span> Getting started</div>
+          <p class="eyebrow">QUICKSTART</p>
+          <h1>Create your first client</h1>
+          <p class="lede">Connect your application to Luma with typed requests, secure credentials, and a small configuration file.</p>
+
+          <div class="callout">
+            <span aria-hidden="true">i</span>
+            <p><strong>Before you begin</strong> Create a project and copy its public identifier from the dashboard.</p>
+          </div>
+
+          <h2 id="client">Install the SDK</h2>
+          <p>Add the package using the package manager already used by your application.</p>
+          <pre><code><span>pnpm</span> add @luma/sdk</code></pre>
+
+          <h2 id="authentication">Configure the client</h2>
+          <p>The client infers response types from your schema and returns structured errors.</p>
+          <pre><code><span>import</span> { createClient } <span>from</span> "@luma/sdk";
+
+<span>export const</span> luma = createClient({
+  projectId: "project_orbit_42",
+  region: "auto",
+});</code></pre>
+        </article>
+      </main>
+
+      <aside class="outline" aria-label="On this page">
+        <p>ON THIS PAGE</p>
+        <a class="active" href="#client">Install the SDK</a>
+        <a href="#authentication">Configure the client</a>
+      </aside>
+    </div>
+
+    <section class="customizer" aria-label="Island customizer">
+      <div>
+        <strong>Island playground</strong>
+        <small>Production API</small>
+      </div>
+      <label>Theme
+        <select data-control="colorScheme">
+          <option value="auto">Auto</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <label>Density
+        <select data-control="density">
+          <option value="compact">Compact</option>
+          <option value="comfortable">Comfortable</option>
+        </select>
+      </label>
+      <label>Placement
+        <select data-control="placement">
+          <option value="bottom-center">Center</option>
+          <option value="bottom-left">Left</option>
+          <option value="bottom-right">Right</option>
+        </select>
+      </label>
+      <label>Accent <input data-accent type="color" value="#7567e8" /></label>
+    </section>
+
+    <div class="toast" data-toast hidden role="status"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

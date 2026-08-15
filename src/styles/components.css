@@ -1,0 +1,243 @@
+:where([data-docs-ai-island] button) {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  font: inherit;
+  outline: none;
+}
+
+:where([data-docs-ai-island] button:disabled) {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+:where([data-docs-ai-island] button:focus-visible) {
+  box-shadow: 0 0 0 3px var(--docs-ai-island-focus-ring);
+}
+
+:where([data-docs-ai-island] [data-part="menu"], [data-docs-ai-island] [data-part="trigger"]) {
+  backdrop-filter: var(--docs-ai-island-backdrop-filter);
+  background: var(--docs-ai-island-surface);
+  border: 1px solid var(--docs-ai-island-border);
+  color: var(--docs-ai-island-foreground);
+}
+
+:where(
+  [data-docs-ai-island][data-surface="solid"] [data-part="menu"],
+  [data-docs-ai-island][data-surface="solid"] [data-part="trigger"]
+) {
+  --docs-ai-island-backdrop-filter: none;
+}
+
+:where([data-docs-ai-island] [data-part="menu"]) {
+  border-radius: var(--docs-ai-island-menu-radius);
+  box-shadow: var(--docs-ai-island-shadow);
+}
+
+:where([data-docs-ai-island] [data-part="header"]) {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px 12px;
+}
+
+:where([data-docs-ai-island] [data-part="header-copy"]) {
+  gap: 3px;
+}
+
+:where([data-docs-ai-island] [data-part="title"]) {
+  color: var(--docs-ai-island-foreground);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+:where([data-docs-ai-island] [data-part="page-title"]) {
+  color: var(--docs-ai-island-muted);
+  font-size: 10px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where([data-docs-ai-island] [data-part="group-label"]) {
+  color: var(--docs-ai-island-faint);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 7px 10px 4px;
+  text-transform: uppercase;
+}
+
+:where([data-docs-ai-island] [data-part="action"]) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 11px;
+  color: inherit;
+  display: flex;
+  gap: 10px;
+  min-height: var(--docs-ai-island-item-height);
+  padding: 6px 10px;
+  text-align: start;
+  width: 100%;
+}
+
+:where(
+  [data-docs-ai-island] [data-part="action"]:hover,
+  [data-docs-ai-island] [data-part="action"]:focus-visible
+) {
+  background: var(--docs-ai-island-hover);
+}
+
+:where([data-docs-ai-island] [data-part="icon-frame"]) {
+  align-items: center;
+  border-radius: 8px;
+  color: var(--docs-ai-island-muted);
+  display: flex;
+  flex: none;
+  height: 30px;
+  justify-content: center;
+  width: 30px;
+}
+
+:where([data-docs-ai-island] [data-part="icon"]) {
+  display: block;
+  fill: none;
+  height: 17px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.55;
+  width: 17px;
+}
+
+:where([data-docs-ai-island] [data-part="action-copy"]) {
+  flex: 1;
+  gap: 3px;
+}
+
+:where([data-docs-ai-island] [data-part="action-label"]) {
+  color: var(--docs-ai-island-foreground);
+  font-size: 12.5px;
+  font-weight: 620;
+  line-height: 1.2;
+}
+
+:where([data-docs-ai-island] [data-part="action-description"]) {
+  color: var(--docs-ai-island-muted);
+  font-size: 10.5px;
+  line-height: 1.3;
+}
+
+:where([data-docs-ai-island] [data-part="action-arrow"]) {
+  color: var(--docs-ai-island-faint);
+  font-size: 11px;
+  padding-inline-end: 2px;
+  transition:
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+:where([data-docs-ai-island] [data-part="action"]:hover [data-part="action-arrow"]) {
+  color: var(--docs-ai-island-muted);
+  transform: translate(1px, -1px);
+}
+
+:where([data-docs-ai-island] [data-part="utilities"]) {
+  border-top: 1px solid var(--docs-ai-island-border);
+  margin: 5px 4px 0;
+  padding: 6px 0 0;
+}
+
+:where([data-docs-ai-island] [data-part="utility"]) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--docs-ai-island-muted);
+  display: flex;
+  font-size: 9px;
+  gap: 6px;
+  height: 36px;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 6px;
+}
+
+:where(
+  [data-docs-ai-island] [data-part="utility"]:hover,
+  [data-docs-ai-island] [data-part="utility"]:focus-visible
+) {
+  background: var(--docs-ai-island-hover);
+  color: var(--docs-ai-island-foreground);
+}
+
+:where([data-docs-ai-island] [data-part="utility"] [data-part="icon-frame"]) {
+  height: auto;
+  width: auto;
+}
+
+:where([data-docs-ai-island] [data-part="utility"] [data-part="icon"]) {
+  height: 12px;
+  width: 12px;
+}
+
+:where([data-docs-ai-island] [data-part="utility"] [data-part="action-copy"]) {
+  display: block;
+  flex: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where([data-docs-ai-island] [data-part="utility"] [data-part="action-label"]) {
+  color: inherit;
+  font-size: inherit;
+  font-weight: 540;
+}
+
+:where([data-docs-ai-island] [data-part="trigger"]) {
+  align-items: center;
+  border-radius: var(--docs-ai-island-trigger-radius);
+  box-shadow:
+    0 12px 36px rgb(0 0 0 / 22%),
+    0 1px 2px rgb(0 0 0 / 10%);
+  display: flex;
+  gap: 10px;
+  height: var(--docs-ai-island-trigger-height);
+  justify-content: center;
+  padding: 0 13px;
+  width: var(--docs-ai-island-trigger-width);
+}
+
+:where([data-docs-ai-island] [data-part="trigger"] > [data-part="icon"]) {
+  color: color-mix(in srgb, var(--docs-ai-island-accent) 72%, white);
+}
+
+:where([data-docs-ai-island] [data-part="trigger-label"]) {
+  color: var(--docs-ai-island-foreground);
+  flex: 1;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: start;
+}
+
+:where([data-docs-ai-island] [data-part="chevron"]) {
+  color: var(--docs-ai-island-faint);
+  font-size: 11px;
+  transform: rotate(180deg);
+  transition: transform var(--docs-ai-island-motion-duration) var(--docs-ai-island-motion-easing);
+}
+
+:where([data-docs-ai-island] [data-part="live-region"]) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

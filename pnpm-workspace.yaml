@@ -1,0 +1,12 @@
+packages:
+  - playground
+  - docs
+  - fixtures/*
+
+allowBuilds:
+  lightningcss-cli@1.33.0: true
+  simple-git-hooks@2.13.1: false
+
+minimumReleaseAge: 1440
+blockExoticSubdeps: true
+strictDepBuilds: true

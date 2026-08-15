@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Docs AI Island — UI prototype</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='7' fill='%238b7cf6'/%3E%3Cpath d='m12 5 1.3 4.2 4.2 1.3-4.2 1.3L12 16l-1.3-4.2-4.2-1.3 4.2-1.3L12 5Z' fill='white'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css?v=5" />
+  </head>
+  <body data-surface="frosted" data-density="compact" data-placement="center">
+    <!-- PROTOTYPE QUESTION: Four radically different Docs AI Island variants,
+         switchable via ?variant=, hosted inside a realistic documentation page. -->
+    <header class="site-nav">
+      <a class="brand" href="#" aria-label="Luma documentation home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4.5 7.2 12 3l7.5 4.2v9.6L12 21l-7.5-4.2V7.2Z"/><path d="m8 9.2 4-2.2 4 2.2v5.6L12 17l-4-2.2V9.2Z"/></svg>
+        </span>
+        <span>Luma</span><span class="brand-slash">/</span><span class="brand-muted">docs</span>
+      </a>
+      <nav class="top-links" aria-label="Primary navigation">
+        <a class="active" href="#">Documentation</a>
+        <a href="#">Guides</a>
+        <a href="#">API</a>
+      </nav>
+      <div class="nav-tools">
+        <button class="search-button" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+          <span>Search docs</span><kbd>⌘ K</kbd>
+        </button>
+        <button class="icon-button" type="button" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8a9.2 9.2 0 0 0-2.9 17.9c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.7.1-.7.1-.7 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.9.1-.7.4-1.1.7-1.4-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.6 4.9.4.3.7.9.7 1.9v2.5c0 .3.2.6.7.5A9.2 9.2 0 0 0 12 2.8Z"/></svg>
+        </button>
+        <button class="theme-button icon-button" type="button" aria-label="Toggle host theme" data-theme-toggle>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="docs-shell">
+      <aside class="sidebar">
+        <div class="sidebar-scroll">
+          <p class="sidebar-label">GET STARTED</p>
+          <a href="#">Introduction</a>
+          <a class="active" href="#">Create a client</a>
+          <a href="#">Authentication</a>
+          <p class="sidebar-label">CORE CONCEPTS</p>
+          <a href="#">Projects</a>
+          <a href="#">Environments</a>
+          <a href="#">Data sources</a>
+          <a href="#">Deployments</a>
+          <p class="sidebar-label">SDK</p>
+          <a href="#">JavaScript</a>
+          <a href="#">Python</a>
+          <a href="#">REST API</a>
+        </div>
+        <div class="sidebar-footer">
+          <span class="status-dot"></span>
+          All systems operational
+        </div>
+      </aside>
+
+      <main class="content">
+        <article>
+          <div class="breadcrumbs"><span>Get started</span><span>/</span><span>Create a client</span></div>
+          <div class="article-heading">
+            <div>
+              <p class="eyebrow">QUICKSTART</p>
+              <h1>Create your first client</h1>
+              <p class="lede">Connect your application to Luma with a typed client, secure credentials, and one small configuration file.</p>
+            </div>
+            <button class="copy-page-top" type="button" data-page-copy>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+              Copy page
+            </button>
+          </div>
+
+          <div class="note-card">
+            <div class="note-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3.8 7.6v8.8L12 21l8.2-4.6V7.6L12 3Z"/><path d="M9.5 12.2 11 13.7l3.8-4"/></svg>
+            </div>
+            <div><strong>Before you begin</strong><p>Create a project in the dashboard and copy its public project ID. Your secret key stays server-side.</p></div>
+          </div>
+
+          <h2 id="install">Install the SDK</h2>
+          <p>The JavaScript SDK works in modern browsers, Node.js, and edge runtimes.</p>
+          <div class="code-block">
+            <div class="code-tabs"><button class="active">pnpm</button><button>npm</button><button>bun</button><span></span><button aria-label="Copy code"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+            <pre><code><span class="code-dim">$</span> pnpm add <span class="code-accent">@luma/sdk</span></code></pre>
+          </div>
+
+          <h2 id="configure">Configure the client</h2>
+          <p>Create one client for your application and pass the project ID from your environment.</p>
+          <div class="code-block tall">
+            <div class="code-tabs"><button class="active">client.ts</button><span></span><button aria-label="Copy code"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div>
+            <pre><code><span class="code-purple">import</span> { createClient } <span class="code-purple">from</span> <span class="code-green">'@luma/sdk'</span>
+
+<span class="code-purple">export const</span> luma = createClient({
+  projectId: <span class="code-green">'project_orbit_42'</span>,
+  region: <span class="code-green">'auto'</span>,
+})</code></pre>
+          </div>
+
+          <h2 id="request">Make a request</h2>
+          <p>The client infers response types from your schema and returns structured errors.</p>
+          <div class="method-row"><span class="method">GET</span><code>/v1/projects/:projectId</code><span class="method-copy">Copy</span></div>
+
+          <div class="article-footer">
+            <a href="#"><span>Previous</span><strong>Introduction</strong></a>
+            <a class="next" href="#"><span>Next</span><strong>Authentication</strong></a>
+          </div>
+        </article>
+      </main>
+
+      <aside class="outline">
+        <p>ON THIS PAGE</p>
+        <a class="active" href="#install">Install the SDK</a>
+        <a href="#configure">Configure the client</a>
+        <a href="#request">Make a request</a>
+        <hr />
+        <a href="#">Edit this page <span>↗</span></a>
+        <a href="#">Report an issue <span>↗</span></a>
+      </aside>
+    </div>
+
+    <button class="customize-toggle" type="button" data-customize-toggle aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4"/></svg>
+      Customize
+    </button>
+
+    <aside class="customizer" data-customizer aria-label="Prototype customization controls" hidden>
+      <div class="customizer-head">
+        <div><p>LIVE SYSTEM</p><h2>Customize island</h2></div>
+        <button type="button" data-customize-close aria-label="Close customizer">×</button>
+      </div>
+      <div class="control-group">
+        <span>Accent</span>
+        <div class="swatches" role="group" aria-label="Accent color">
+          <button class="active" style="--swatch:#8b7cf6" data-accent="#8b7cf6" aria-label="Iris"></button>
+          <button style="--swatch:#f47f52" data-accent="#f47f52" aria-label="Ember"></button>
+          <button style="--swatch:#20b486" data-accent="#20b486" aria-label="Mint"></button>
+          <button style="--swatch:#3b9eff" data-accent="#3b9eff" aria-label="Azure"></button>
+          <button style="--swatch:#e65d9d" data-accent="#e65d9d" aria-label="Rose"></button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span>Surface</span>
+        <div class="segmented" data-control="surface">
+          <button class="active" data-value="frosted">Frosted</button><button data-value="solid">Solid</button><button data-value="ink">Ink</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span>Density</span>
+        <div class="segmented" data-control="density">
+          <button class="active" data-value="compact">Compact</button><button data-value="comfortable">Comfort</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span>Placement</span>
+        <div class="segmented" data-control="placement">
+          <button data-value="left">Left</button><button class="active" data-value="center">Center</button><button data-value="right">Right</button>
+        </div>
+      </div>
+      <label class="range-control"><span>Corner radius <output data-radius-output>20px</output></span><input type="range" min="10" max="30" value="20" data-radius /></label>
+      <label class="toggle-row"><span><strong>Host theme</strong><small>See the Island in context</small></span><input type="checkbox" data-host-theme checked /><i></i></label>
+      <div class="config-preview"><span>Current state</span><code data-config-preview></code></div>
+    </aside>
+
+    <div class="island-stage" data-island-stage>
+      <div class="island-root" data-island-root></div>
+    </div>
+
+    <div class="prototype-state" data-prototype-state aria-live="polite"></div>
+
+    <div class="prototype-switcher" data-prototype-switcher hidden>
+      <button type="button" data-previous aria-label="Previous variant">←</button>
+      <div><span>UI PROTOTYPE</span><strong data-variant-label></strong></div>
+      <button type="button" data-next aria-label="Next variant">→</button>
+    </div>
+
+    <dialog class="markdown-dialog" data-markdown-dialog>
+      <div class="dialog-head"><div><p>PAGE SOURCE</p><h2>Markdown preview</h2></div><button type="button" data-dialog-close aria-label="Close">×</button></div>
+      <pre data-markdown-preview></pre>
+      <div class="dialog-actions"><span>Resolved from <code>/getting-started/create-client.md</code></span><button type="button" data-copy-markdown>Copy Markdown</button></div>
+    </dialog>
+
+    <div class="toast" data-toast role="status" aria-live="polite" hidden></div>
+    <script type="module" src="./prototype.js?v=5"></script>
+  </body>
+</html>

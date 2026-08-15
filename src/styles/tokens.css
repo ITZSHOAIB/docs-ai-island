@@ -1,0 +1,55 @@
+:where([data-docs-ai-island]) {
+  --docs-ai-island-accent: #7567e8;
+  --docs-ai-island-surface: rgb(255 255 255 / 88%);
+  --docs-ai-island-foreground: #202126;
+  --docs-ai-island-muted: #686a74;
+  --docs-ai-island-faint: #8f919a;
+  --docs-ai-island-border: rgb(29 31 38 / 11%);
+  --docs-ai-island-hover: rgb(30 31 38 / 6%);
+  --docs-ai-island-focus-ring: color-mix(in srgb, var(--docs-ai-island-accent) 32%, transparent);
+  --docs-ai-island-shadow: 0 20px 56px rgb(20 22 30 / 18%), 0 1px 2px rgb(20 22 30 / 9%);
+  --docs-ai-island-menu-width: 340px;
+  --docs-ai-island-menu-radius: 18px;
+  --docs-ai-island-trigger-width: 158px;
+  --docs-ai-island-trigger-height: 44px;
+  --docs-ai-island-trigger-radius: 16px;
+  --docs-ai-island-offset-block: 24px;
+  --docs-ai-island-offset-inline: 24px;
+  --docs-ai-island-z-index: 100;
+  --docs-ai-island-font-family: inherit;
+  --docs-ai-island-motion-duration: 180ms;
+  --docs-ai-island-motion-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --docs-ai-island-item-height: 50px;
+  --docs-ai-island-menu-padding: 6px;
+  --docs-ai-island-backdrop-filter: blur(24px) saturate(140%);
+  color-scheme: light;
+}
+
+:where([data-docs-ai-island][data-density="comfortable"]) {
+  --docs-ai-island-item-height: 58px;
+  --docs-ai-island-menu-padding: 9px;
+}
+
+:where([data-docs-ai-island][data-color-scheme="dark"]) {
+  --docs-ai-island-surface: rgb(22 23 29 / 90%);
+  --docs-ai-island-foreground: #f6f6f8;
+  --docs-ai-island-muted: #a2a3ab;
+  --docs-ai-island-faint: #747680;
+  --docs-ai-island-border: rgb(255 255 255 / 10%);
+  --docs-ai-island-hover: rgb(255 255 255 / 7%);
+  --docs-ai-island-shadow: 0 20px 56px rgb(0 0 0 / 38%), 0 1px 2px rgb(0 0 0 / 22%);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :where([data-docs-ai-island][data-color-scheme="auto"]) {
+    --docs-ai-island-surface: rgb(22 23 29 / 90%);
+    --docs-ai-island-foreground: #f6f6f8;
+    --docs-ai-island-muted: #a2a3ab;
+    --docs-ai-island-faint: #747680;
+    --docs-ai-island-border: rgb(255 255 255 / 10%);
+    --docs-ai-island-hover: rgb(255 255 255 / 7%);
+    --docs-ai-island-shadow: 0 20px 56px rgb(0 0 0 / 38%), 0 1px 2px rgb(0 0 0 / 22%);
+    color-scheme: dark;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@docs-ai-island/playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 4173 --strictPort",
+    "build": "vite build"
+  }
+}

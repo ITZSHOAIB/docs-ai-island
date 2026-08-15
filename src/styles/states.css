@@ -1,0 +1,39 @@
+:where([data-docs-ai-island] [data-part="menu"]) {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transform-origin: bottom center;
+  transition:
+    opacity calc(var(--docs-ai-island-motion-duration) * 0.83) ease,
+    transform var(--docs-ai-island-motion-duration) var(--docs-ai-island-motion-easing),
+    visibility 0s linear var(--docs-ai-island-motion-duration);
+  visibility: hidden;
+}
+
+:where([data-docs-ai-island][data-state="open"] [data-part="menu"]) {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
+  visibility: visible;
+}
+
+:where([data-docs-ai-island][data-state="open"] [data-part="chevron"]) {
+  transform: none;
+}
+
+:where([data-docs-ai-island][data-action-status="pending"] [data-part="action"][aria-busy="true"]) {
+  background: var(--docs-ai-island-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([data-docs-ai-island]) {
+    --docs-ai-island-motion-duration: 0.01ms;
+  }
+}
+
+@media (forced-colors: active) {
+  :where([data-docs-ai-island] [data-part="menu"], [data-docs-ai-island] [data-part="trigger"]) {
+    background: Canvas;
+    border-color: CanvasText;
+    color: CanvasText;
+  }
+}
