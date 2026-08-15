@@ -22,6 +22,8 @@ export interface DocsAiIslandPageContext {
   readonly title: string;
 }
 
+export type DocsAiIslandVisibility = boolean | ((page: DocsAiIslandPageContext) => boolean);
+
 export interface DocsAiIslandContent {
   readonly kind: "markdown" | "text";
   readonly value: string;
@@ -120,6 +122,7 @@ export type DocsAiIslandEvent =
 export interface DocsAiIslandConfig {
   readonly container?: Element | string;
   readonly pageTitle?: string | (() => string);
+  readonly visible?: DocsAiIslandVisibility;
   readonly initialOpen?: boolean;
   readonly groups?: readonly DocsAiIslandActionGroup[];
   readonly appearance?: DocsAiIslandAppearance;
@@ -132,6 +135,7 @@ export interface DocsAiIslandController {
   readonly element: HTMLElement;
   open(): void;
   close(): void;
+  refresh(): void;
   update(config: Partial<DocsAiIslandConfig>): void;
   destroy(): void;
 }

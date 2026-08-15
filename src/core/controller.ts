@@ -175,6 +175,9 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
   }
 
   function render(): void {
+    const page = resolvePageContext(ownerDocument, config.pageTitle);
+    const visible = typeof config.visible === "function" ? config.visible(page) : config.visible;
+    if (!visible) state = initialState;
     actionRegistry = new Map();
     root.replaceChildren();
     root.dataset.state = state.status;
@@ -183,6 +186,8 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     root.dataset.colorScheme = config.appearance.colorScheme;
     root.dataset.surface = config.appearance.surface;
     applyTheme();
+    root.hidden = !visible;
+    root.dataset.visibility = visible ? "visible" : "hidden";
 
     menu = ownerDocument.createElement("div");
     menu.id = menuId;
@@ -192,7 +197,6 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     menu.setAttribute("aria-label", config.messages.menuTitle);
     menu.setAttribute("aria-hidden", String(state.status !== "open"));
 
-    const page = resolvePageContext(ownerDocument, config.pageTitle);
     const header = ownerDocument.createElement("div");
     header.dataset.part = "header";
     const headerCopy = ownerDocument.createElement("span");
@@ -246,7 +250,7 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
   }
 
   function open(): void {
-    if (destroyed || state.status === "open") return;
+    if (destroyed || root.hidden || state.status === "open") return;
     state = transition(state, { type: "open" });
     root.dataset.state = "open";
     menu.setAttribute("aria-hidden", "false");
@@ -282,6 +286,7 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
   }
 
   async function runAction(actionId: string): Promise<void> {
+    if (root.hidden) return;
     const entry = actionRegistry.get(actionId);
     if (!entry || entry.action.disabled) return;
 
@@ -388,6 +393,13 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
     element: root,
     open,
     close: () => close(),
+    refresh() {
+      if (destroyed) return;
+      abortActiveAction();
+      close();
+      delete root.dataset.actionStatus;
+      render();
+    },
     update(update) {
       if (destroyed) return;
       abortActiveAction();

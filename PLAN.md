@@ -30,7 +30,7 @@ The first production pilot is implemented and committed. It includes the framewo
 
 The first framework proof is also implemented: a realistic VitePress 1.6 production fixture mounts from the default theme's `layout-bottom` slot, refreshes through the controller on SPA navigation, follows VitePress light/dark state, resolves explicit canonical URLs, coexists with another floating control, and passes mobile and axe checks. A second clean consumer installs the packed tarball and completes a VitePress production build.
 
-The pilot does **not** yet include route visibility, packaged automatic SPA adapters, the remaining Starlight/Astro and Docusaurus fixtures, the Vocs documentation site, or a published npm release. Those remain V1 work and must not be described as shipped.
+The pilot does **not** include packaged automatic SPA adapters, the remaining Starlight/Astro and Docusaurus fixtures, the Vocs documentation site, or a published npm release. Those remain later work and must not be described as shipped.
 
 Publishing is intentionally disabled during development. CI validates pushes to `main`, but no GitHub Actions workflow may invoke `npm publish` or `changeset publish` until the working-version acceptance gates pass and the maintainer explicitly approves enabling releases.
 
@@ -295,46 +295,23 @@ Important boundaries:
 - Custom icons return DOM nodes rather than accepting unsanitized HTML strings.
 - Config callbacks may be asynchronous where route metadata or content requires it.
 
-## Page Context resolution
+## Page Context resolution and visibility
 
-The default resolver should read:
+The implemented V1-alpha context reads current browser URL, explicit canonical link with URL fallback, and configured/document title. Actions and visibility predicates receive that immutable snapshot when invoked or rendered. Description, language, direction, version, and a replaceable resolver remain deferred until fixture or real-site evidence requires them.
 
-1. `<link rel="canonical">`, falling back to `window.location.href`;
-2. `document.title`;
-3. description metadata;
-4. `<html lang>` and `<html dir>`;
-5. optional page metadata embedded by an Adapter.
-
-Consumers can replace or extend the resolver:
+Visibility is one composable primitive rather than route syntax duplicated in core:
 
 ```ts
-page: {
-  resolve(defaults) {
-    return {
-      ...defaults,
-      version: document.documentElement.dataset.docsVersion,
-    }
-  },
-  include: ['/guide/**', '/reference/**'],
-  exclude: ['/search', '/404'],
-}
+const island = mountDocsAiIsland({
+  visible: (page) =>
+    page.url.pathname.startsWith('/guide/') ||
+    page.url.pathname.startsWith('/reference/'),
+})
+
+island.refresh()
 ```
 
-Visibility precedence should be predictable:
-
-1. explicit per-page opt-out;
-2. `exclude` rules;
-3. `include` rules;
-4. global `enabled` value;
-5. visible by default.
-
-For generic HTML, support a declarative opt-out such as:
-
-```html
-<meta name="docs-ai-island" content="off">
-```
-
-Adapters can map framework frontmatter such as `docsAiIsland: false` into the same result without making the core aware of frontmatter.
+Framework recipes can close over their own reactive frontmatter, such as `visible: () => frontmatter.value.docsAiIsland !== false`, and call `refresh()` after navigation settles. Generic HTML can pass a boolean or predicate directly. The core does not infer metadata names, parse route globs, patch history, or ship adapters.
 
 ## Content Source pipeline
 
@@ -674,7 +651,7 @@ Light DOM with external, cascade-layered CSS is the implementation recommendatio
 
 Exit gate status: visual and mobile behavior selected; content fallback direction remains open.
 
-### Phase 1 — framework-neutral alpha — in progress
+### Phase 1 — framework-neutral alpha — substantially complete
 
 - initialize package, tooling, license, contribution files, and CI;
 - implement Page Context, Content Source, Action, and event contracts;
@@ -685,7 +662,7 @@ Exit gate status: visual and mobile behavior selected; content fallback directio
 
 Exit gate: a static site can install the package, configure Actions, and pass accessibility/browser tests without a framework runtime.
 
-Progress: the repository foundation, controller, page URL/title context, default AI targets, custom actions, appearance/messages/theme configuration, cleanup, plain playground, and Chromium accessibility/browser tests are complete. Explicit custom/URL content sources and built-in copy/view/resource Actions are complete; visibility and automatic navigation refresh remain.
+Progress: the repository foundation, controller, page URL/title context, default AI targets, custom actions, appearance/messages/theme configuration, cleanup, plain playground, Chromium accessibility/browser tests, explicit custom/URL content sources, built-in copy/view/resource Actions, predicate visibility, explicit SPA refresh, and packed plain-HTML proof are complete. The generated token/part reference remains before the alpha exit gate is fully closed.
 
 ### Phase 2 — integration proof
 
@@ -696,7 +673,7 @@ Progress: the repository foundation, controller, page URL/title context, default
 
 Exit gate: all fixture production builds and route-change tests pass.
 
-Progress: the VitePress 1.6 recipe and fixture are complete. They cover production/SSR build, public-package mounting, canonical handoff, SPA route refresh without remounting, exact copy/view Markdown across routes, honest missing-asset failure, host theme synchronization, floating-control coexistence, mobile gutters, accessibility, and a packed-tarball consumer build. Starlight/Astro and Docusaurus remain.
+Progress: the VitePress 1.6 recipe and fixture are complete. They cover production/SSR build, public-package mounting, canonical handoff, explicit SPA route refresh without remounting, frontmatter opt-out, exact copy/view Markdown across routes, honest missing-asset failure, host theme synchronization, floating-control coexistence, mobile gutters, accessibility, and a packed-tarball consumer build. Starlight/Astro and Docusaurus remain.
 
 ### Phase 3 — beta hardening
 
@@ -784,9 +761,8 @@ Downloads alone should not determine whether an Adapter is extracted. Two or mor
 
 1. Should document-to-Markdown extraction ship in core as a lazy chunk or as an optional subpath?
 2. Should mobile always use a bottom sheet or only below a measured-space threshold?
-3. Which per-page opt-out name is least likely to conflict across frameworks?
-4. Should external AI handoff copy content before opening when a Target cannot reliably browse the URL?
-5. What minimum browser support is acceptable for native popover behavior and fallback code?
+3. Should external AI handoff copy content before opening when a Target cannot reliably browse the URL?
+4. What minimum browser support is acceptable for native popover behavior and fallback code?
 
 These questions should be answered by implementation spikes and fixture evidence rather than additional speculative configuration.
 

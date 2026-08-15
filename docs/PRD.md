@@ -60,8 +60,8 @@ The product is an **AI handoff island**, not an embedded chatbot. It does not an
 | FR-08 | Announce pending, successful, and failed actions and emit typed lifecycle events. | Implemented |
 | FR-09 | Provide built-in copy-page, view-Markdown, copy-resource, and open-URL factories. | Implemented |
 | FR-10 | Support explicit content sources and well-defined fallback behavior. | Implemented for custom and URL Markdown sources; DOM extraction deliberately deferred |
-| FR-11 | Support route visibility, page opt-out, and SPA lifecycle refresh. | Partial: VitePress refresh recipe proven; visibility and opt-out remain |
-| FR-12 | Provide tested recipes for plain HTML, VitePress, Starlight/Astro, and Docusaurus. | Partial: VitePress production fixture implemented |
+| FR-11 | Support route visibility, page opt-out, and SPA lifecycle refresh. | Implemented through predicate visibility and explicit refresh |
+| FR-12 | Provide tested recipes for plain HTML, VitePress, Starlight/Astro, and Docusaurus. | Partial: plain HTML and VitePress production fixtures implemented |
 
 ## Experience Requirements
 
@@ -95,7 +95,7 @@ The two primary seams are the exported package API and the rendered island in a 
 - Package tests cover export maps, packed contents, ESM resolution, and import without DOM globals.
 - Playwright tests cover menu behavior, keyboard navigation, focus restoration, runtime customization, mobile fit, accessibility, and approved visual baselines.
 - Size Limit enforces separate JavaScript and CSS budgets.
-- Framework fixtures consume the package through its public entry points and exercise production builds and route changes. The VitePress fixture additionally validates exact copy/view Markdown across routes, honest missing-asset failure, theme coexistence, canonical handoff, mobile fit, axe results, and a clean packed-tarball consumer build; the remaining framework fixtures are pending.
+- Framework fixtures consume the package through its public entry points and exercise production builds and route changes. Plain HTML validates public JavaScript and typed CSS exports, explicit refresh, browser mounting, and a clean packed build. VitePress additionally validates frontmatter opt-out, exact copy/view Markdown across routes, honest missing-asset failure, theme coexistence, canonical handoff, mobile fit, axe results, and a clean packed build; the remaining framework fixtures are pending.
 
 ## Non-Functional Requirements
 
@@ -116,12 +116,14 @@ The two primary seams are the exported package API and the rendered island in a 
 - Type, unit, package, size, accessibility, browser, mobile, and visual checks pass.
 - The package has documentation, contribution guidance, security policy, and CI. No active workflow can publish to npm.
 
-### V1 alpha — pending
+### V1 alpha — substantially complete
 
 - Content-source and built-in page/resource actions are implemented.
 - Visibility and SPA lifecycle behavior are defined and tested.
 - At least the plain HTML fixture passes as a packed-package consumer.
 - The public token and part reference is generated or verified from one source of truth.
+
+The first three gates pass. Token/part reference generation remains before the alpha milestone is complete.
 
 ### V1 beta/release — pending
 

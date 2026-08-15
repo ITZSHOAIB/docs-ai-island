@@ -52,6 +52,7 @@ const openResourceAction: DocsAiIslandAction = openUrl({
 });
 
 const config = defineConfig({
+  visible: (page) => page.url.pathname !== "/internal",
   groups: [
     {
       id: "main",
@@ -71,5 +72,7 @@ const config = defineConfig({
 });
 
 const controller: DocsAiIslandController = mountDocsAiIsland(config);
+controller.refresh();
 controller.update({ pageTitle: "Updated page" });
+controller.update({ visible: false });
 controller.destroy();

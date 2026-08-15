@@ -21,11 +21,12 @@ const markdown = markdownSource({
 const DocsAiIslandBridge = {
   setup() {
     const route = useRoute();
-    const { isDark } = useData();
+    const { frontmatter, isDark } = useData();
     let controller: DocsAiIslandController | undefined;
 
     onMounted(() => {
       controller = mountDocsAiIsland({
+        visible: () => frontmatter.value.docsAiIsland !== false,
         pageTitle: () =>
           document.querySelector<HTMLElement>(".VPDoc h1, .VPHome h1")?.textContent ??
           document.title,
@@ -63,8 +64,15 @@ const DocsAiIslandBridge = {
       });
     });
 
-    watch([() => route.path, isDark], async () => {
-      await nextTick();
+    watch(
+      () => route.path,
+      async () => {
+        await nextTick();
+        controller?.refresh();
+      },
+    );
+
+    watch(isDark, () => {
       controller?.update({
         appearance: {
           colorScheme: isDark.value ? "dark" : "light",

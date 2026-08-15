@@ -11,6 +11,10 @@
   z-index: var(--docs-ai-island-z-index);
 }
 
+[data-docs-ai-island][hidden] {
+  display: none;
+}
+
 :where([data-docs-ai-island][data-placement="bottom-left"]) {
   left: calc(var(--docs-ai-island-offset-inline) + env(safe-area-inset-left, 0px));
 }

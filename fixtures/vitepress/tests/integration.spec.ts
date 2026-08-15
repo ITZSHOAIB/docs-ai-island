@@ -63,6 +63,40 @@ test("refreshes page context after client-side navigation without remounting", a
   );
 });
 
+test("closes stale Island UI when VitePress navigation settles", async ({ page }) => {
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await expect(island).toHaveAttribute("data-state", "open");
+
+  await page
+    .getByRole("link", { name: "Client options" })
+    .first()
+    .evaluate((link: HTMLAnchorElement) => link.click());
+  await expect(page).toHaveURL(/\/reference\/options$/);
+  await expect(page.locator(".VPDoc h1")).toHaveText("Client options");
+
+  await expect(island).toHaveAttribute("data-state", "closed");
+});
+
+test("VitePress frontmatter opts one page out and restores the same controller", async ({
+  page,
+}) => {
+  await page.goto("/guide/no-ai");
+  const island = page.locator("[data-docs-ai-island]");
+  await island.evaluate((element) => {
+    element.dataset.fixtureIdentity = "original";
+  });
+
+  await expect(island).toHaveAttribute("data-visibility", "hidden");
+  await expect(island).toBeHidden();
+
+  await page.locator(".VPDoc").getByRole("link", { name: "client options" }).click();
+  await expect(page).toHaveURL(/\/reference\/options$/);
+  await expect(island).toHaveAttribute("data-visibility", "visible");
+  await expect(island).toHaveAttribute("data-fixture-identity", "original");
+  await expect(island.getByRole("button", { name: "Ask AI" })).toBeVisible();
+});
+
 test("changes copied content and viewed Markdown after SPA navigation", async ({ page }) => {
   await page.getByRole("link", { name: "Client options" }).first().click();
   await expect(page).toHaveURL(/\/reference\/options$/);

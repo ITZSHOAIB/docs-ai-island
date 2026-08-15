@@ -6,6 +6,8 @@ The fixture proves:
 
 - extension of the default VitePress theme through `layout-bottom`;
 - one island instance across client-side route changes;
+- explicit `controller.refresh()` after VitePress navigation settles;
+- page-level frontmatter opt-out without remounting;
 - canonical URL and page-title refresh through the public controller;
 - exact Markdown copy/view from fixture-owned static assets across route changes;
 - honest failure when a route has no declared Markdown asset;

@@ -96,7 +96,14 @@ const mcp = copyResource({
 });
 
 const config = defineConfig({
-  pageTitle: "Create your first client",
+  initialOpen: fixtureOptions.has("initial-open"),
+  pageTitle: fixtureOptions.has("route-lifecycle")
+    ? () => document.title
+    : "Create your first client",
+  ...(fixtureOptions.has("hidden") ? { visible: false } : {}),
+  ...(fixtureOptions.has("route-lifecycle")
+    ? { visible: (page: { url: URL }) => page.url.pathname !== "/hidden" }
+    : {}),
   ...(fixtureOptions.has("clipboard-denied")
     ? { messages: { actionFailed: (label: string) => `Could not complete ${label}` } }
     : {}),
@@ -123,6 +130,20 @@ const config = defineConfig({
                 label: "Unsafe",
                 url: "javascript:alert(1)",
               }),
+            ]
+          : []),
+        ...(fixtureOptions.has("route-lifecycle")
+          ? [
+              {
+                id: "capture-route",
+                label: "Capture route",
+                icon: "link" as const,
+                closeOnSelect: false,
+                onSelect({ element, page }: { element: HTMLElement; page: { canonicalUrl: URL } }) {
+                  element.dataset.fixtureCanonical = page.canonicalUrl.href;
+                  return "Current canonical URL captured";
+                },
+              },
             ]
           : []),
       ],
@@ -174,6 +195,12 @@ const controller = mountDocsAiIsland(config);
 
 window.addEventListener("fixture:update", () => {
   controller.update({ pageTitle: "Updated fixture page" });
+});
+window.addEventListener("fixture:open", () => {
+  controller.open();
+});
+window.addEventListener("fixture:refresh", () => {
+  controller.refresh();
 });
 window.addEventListener("fixture:destroy", () => {
   controller.destroy();

@@ -69,3 +69,25 @@ jobs:
         run: pnpm test:fixture:vitepress
       - name: Test packed package in VitePress
         run: pnpm test:fixture:vitepress:pack
+
+  html:
+    name: Plain HTML integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Setup pnpm
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Test plain HTML integration
+        run: pnpm test:fixture:html
+      - name: Test packed package in plain HTML
+        run: pnpm test:fixture:html:pack

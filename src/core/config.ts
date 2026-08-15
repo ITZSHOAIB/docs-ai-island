@@ -5,11 +5,13 @@ import type {
   DocsAiIslandConfig,
   DocsAiIslandMessages,
   DocsAiIslandTheme,
+  DocsAiIslandVisibility,
 } from "../public-types.ts";
 
 export interface NormalizedConfig {
   readonly container?: Element | string;
   readonly pageTitle?: string | (() => string);
+  readonly visible: DocsAiIslandVisibility;
   readonly initialOpen: boolean;
   readonly groups: readonly DocsAiIslandActionGroup[];
   readonly appearance: Required<DocsAiIslandAppearance>;
@@ -56,6 +58,7 @@ export function normalizeConfig(config: DocsAiIslandConfig): NormalizedConfig {
     ...(config.container === undefined ? {} : { container: config.container }),
     ...(config.pageTitle === undefined ? {} : { pageTitle: config.pageTitle }),
     ...(config.onEvent === undefined ? {} : { onEvent: config.onEvent }),
+    visible: config.visible ?? true,
     initialOpen: config.initialOpen ?? false,
     groups,
     appearance: { ...defaultAppearance, ...config.appearance },

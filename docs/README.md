@@ -7,10 +7,10 @@ This directory and the root planning files are the source of truth for Docs AI I
 | Document | Purpose | Current state |
 | --- | --- | --- |
 | [`PRD.md`](./PRD.md) | Product requirements, users, acceptance criteria, and release boundary | Active for the pilot and V1 |
-| [`../PLAN.md`](../PLAN.md) | Product research, positioning, full product design, and phased delivery | Pilot and VitePress proof implemented; V1 active |
-| [`../PROJECT_SETUP_PLAN.md`](../PROJECT_SETUP_PLAN.md) | Toolchain, repository structure, quality gates, and implementation sequence | Foundation, vertical slice, and first framework proof implemented |
-| [`adr/`](./adr/) | Accepted architectural decisions and their consequences | Two accepted decisions |
-| [`explorations/`](./explorations/) | Proposed design checkpoints and phase-level TDD plans | Content and built-in Actions proposed |
+| [`../PLAN.md`](../PLAN.md) | Product research, positioning, full product design, and phased delivery | V1 alpha substantially complete; beta proof active |
+| [`../PROJECT_SETUP_PLAN.md`](../PROJECT_SETUP_PLAN.md) | Toolchain, repository structure, quality gates, and implementation sequence | Alpha core plus plain HTML and VitePress proofs implemented |
+| [`adr/`](./adr/) | Accepted architectural decisions and their consequences | Four accepted decisions |
+| [`explorations/`](./explorations/) | Proposed design checkpoints and phase-level TDD plans | Content Actions complete; route lifecycle active |
 | [`../CONTEXT.md`](../CONTEXT.md) | Original research and project context | Historical context |
 | [`../prototype/`](../prototype/) | Throwaway UI explorations and selection notes | Archived design evidence |
 
@@ -22,4 +22,4 @@ This directory and the root planning files are the source of truth for Docs AI I
 - Keep completed and unimplemented work visibly separate.
 - Documentation-only changes do not require a Changeset.
 
-Last reconciled with the implementation on 2026-08-15 after the VitePress integration proof.
+Last reconciled with the implementation on 2026-08-15 after predicate visibility, explicit refresh, and the packed plain-HTML proof.

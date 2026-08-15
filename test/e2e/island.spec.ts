@@ -43,6 +43,101 @@ test("opens the Option A menu and exposes stable parts", async ({ page }) => {
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
 });
 
+test("mounts one native hidden Island when visibility is false", async ({ page }) => {
+  await page.goto("/?hidden");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await expect(island).toHaveCount(1);
+  await expect(island).toHaveAttribute("hidden", "");
+  await expect(island).toHaveAttribute("data-visibility", "hidden");
+  await expect(island).toBeHidden();
+});
+
+test("hidden visibility overrides an initially open request", async ({ page }) => {
+  await page.goto("/?hidden&initial-open");
+
+  const island = page.locator("[data-docs-ai-island]");
+  await expect(island).toHaveAttribute("data-visibility", "hidden");
+  await expect(island).toHaveAttribute("data-state", "closed");
+  await expect(island.locator('[data-part="menu"]')).toHaveAttribute("aria-hidden", "true");
+});
+
+test("programmatic open cannot expose a hidden Island", async ({ page }) => {
+  await page.goto("/?hidden");
+  await page.evaluate(() => window.dispatchEvent(new Event("fixture:open")));
+
+  const island = page.locator("[data-docs-ai-island]");
+  await expect(island).toHaveAttribute("data-state", "closed");
+  await expect(island.locator('[data-part="menu"]')).toHaveAttribute("aria-hidden", "true");
+});
+
+test("delegated Action clicks are inert while the Island is hidden", async ({ page }) => {
+  await page.goto("/?hidden");
+  await page.locator('[data-action-id="copy-page"]').evaluate((button: HTMLButtonElement) => {
+    button.click();
+  });
+
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-outcome-payload", /.+/);
+});
+
+test("refreshes current page context without replacing the controller root", async ({ page }) => {
+  await page.goto("/?route-lifecycle");
+  const island = page.locator("[data-docs-ai-island]");
+  await island.evaluate((element) => {
+    element.dataset.fixtureIdentity = "original";
+  });
+  await page.evaluate(() => {
+    history.pushState({}, "", "/guides/routing");
+    document.title = "Routing guide";
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = "https://docs.example.dev/guides/routing";
+    window.dispatchEvent(new Event("fixture:refresh"));
+  });
+
+  await expect(island).toHaveAttribute("data-fixture-identity", "original");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await expect(island.locator('[data-part="page-title"]')).toHaveText("Routing guide");
+  await island.locator('[data-action-id="capture-route"]').click();
+  await expect(island).toHaveAttribute(
+    "data-fixture-canonical",
+    "https://docs.example.dev/guides/routing",
+  );
+});
+
+test("refresh closes stale UI and safely releases focus when a route becomes hidden", async ({
+  page,
+}) => {
+  await page.goto("/?route-lifecycle");
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await expect(island.locator('[data-action-id="chatgpt"]')).toBeFocused();
+
+  await page.evaluate(() => {
+    history.pushState({}, "", "/hidden");
+    window.dispatchEvent(new Event("fixture:refresh"));
+  });
+
+  await expect(island).toHaveAttribute("data-visibility", "hidden");
+  await expect(island).toHaveAttribute("data-state", "closed");
+  await expect(island.locator('[data-part="menu"]')).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator("body")).toBeFocused();
+});
+
+test("refresh aborts pending page content and suppresses late effects", async ({ page }) => {
+  await page.goto("/?delayed-content&route-lifecycle&copy-url-fallback");
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+  await page.evaluate(() => window.dispatchEvent(new Event("fixture:refresh")));
+
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-source-aborted", "true");
+  await page.waitForTimeout(250);
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-clipboard", /.+/);
+  await expect(page.locator("html")).not.toHaveAttribute("data-fixture-outcome-payload", /.+/);
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("");
+});
+
 test("supports menu keyboard navigation and restores trigger focus", async ({ page }) => {
   const island = page.locator("[data-docs-ai-island]");
   const trigger = island.getByRole("button", { name: "Ask AI" });

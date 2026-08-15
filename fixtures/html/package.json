@@ -1,0 +1,17 @@
+{
+  "name": "docs-ai-island-fixture-html",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "docs-ai-island": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vite": "8.2.1"
+  }
+}

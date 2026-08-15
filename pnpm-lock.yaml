@@ -63,6 +63,19 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(@types/node@22.20.1)(@vitest/coverage-v8@4.1.10)(vite@8.2.1(@types/node@22.20.1)(yaml@2.9.0))
 
+  fixtures/html:
+    dependencies:
+      docs-ai-island:
+        specifier: workspace:*
+        version: link:../..
+    devDependencies:
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vite:
+        specifier: 8.2.1
+        version: 8.2.1(@types/node@22.20.1)(yaml@2.9.0)
+
   fixtures/vitepress:
     dependencies:
       docs-ai-island:

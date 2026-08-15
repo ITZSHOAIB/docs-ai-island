@@ -2,4 +2,4 @@
 "docs-ai-island": minor
 ---
 
-Add explicit custom and URL-backed Content Sources, lazy `copyPage()` with exact Markdown/text clipboard handoff and opt-in canonical-URL fallback, safe `viewMarkdown()` navigation, generic `copyResource()`/`openUrl()` Actions, operation-scoped cancellation and event privacy, and a tested VitePress integration recipe.
+Add explicit custom and URL-backed Content Sources, lazy copy/view/resource Actions, operation-scoped cancellation and event privacy, predicate visibility, explicit SPA refresh, typed stylesheet exports, and tested plain HTML and VitePress integration recipes.

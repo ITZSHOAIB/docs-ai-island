@@ -29,6 +29,7 @@ export type {
   DocsAiIslandTheme,
   DocsAiIslandThemeTokens,
   DocsAiIslandViewableContentSource,
+  DocsAiIslandVisibility,
   DocsAiMarkdownSourceOptions,
   DocsAiOpenUrlOptions,
   DocsAiTargetOptions,

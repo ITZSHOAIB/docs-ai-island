@@ -116,6 +116,24 @@ Resource values may be literals or functions of current Page Context. URL clipbo
 
 Async Actions are scoped to one active operation. Starting another Action, updating the controller after navigation, or destroying it aborts pending content work and suppresses stale clipboard, announcement, and event effects. Lifecycle events identify the Action but never include copied content.
 
+## Route visibility and SPA refresh
+
+Visibility can be static or derived from current Page Context. After client-side navigation settles, call `refresh()` to close stale UI, abort pending work, and re-read URL, canonical metadata, title, visibility, and dynamic Action values without remounting:
+
+```ts
+const island = mountDocsAiIsland({
+  visible: (page) => !page.url.pathname.startsWith("/internal/"),
+  pageTitle: () => document.querySelector("h1")?.textContent ?? document.title,
+});
+
+router.afterEach(async () => {
+  await renderComplete();
+  island.refresh();
+});
+```
+
+The core deliberately does not patch browser history or guess framework lifecycle events. A hidden Island keeps its controller identity but uses the native `hidden` attribute, exposes `data-visibility="hidden"`, closes its menu, and cannot run Actions.
+
 ## VitePress
 
 The repository includes a production-built VitePress 1.6 fixture that uses the public package API. Extend the default theme, mount the island from the `layout-bottom` slot, and keep the controller alive across client-side navigation:
@@ -142,11 +160,12 @@ const markdown = markdownSource({
 const DocsAiIslandBridge = {
   setup() {
     const route = useRoute();
-    const { isDark } = useData();
+    const { frontmatter, isDark } = useData();
     let island: ReturnType<typeof mountDocsAiIsland> | undefined;
 
     onMounted(() => {
       island = mountDocsAiIsland({
+        visible: () => frontmatter.value.docsAiIsland !== false,
         appearance: { colorScheme: isDark.value ? "dark" : "light" },
         groups: [
           { id: "assistants", actions: [chatgpt(), claude()] },
@@ -163,8 +182,12 @@ const DocsAiIslandBridge = {
       });
     });
 
-    watch([() => route.path, isDark], async () => {
+    watch(() => route.path, async () => {
       await nextTick();
+      island?.refresh();
+    });
+
+    watch(isDark, () => {
       island?.update({
         appearance: { colorScheme: isDark.value ? "dark" : "light" },
       });
@@ -185,6 +208,10 @@ export default {
 ```
 
 The example deliberately maps route paths to fixture-owned public Markdown assets; adapt that explicit mapping to the content pipeline your site already exposes. See the [complete VitePress fixture](./fixtures/vitepress/) for exact copy/view behavior, canonical URL generation, custom actions, host-theme styling, and browser tests. Run it with `pnpm test:fixture:vitepress`; `pnpm test:fixture:vitepress:pack` also installs the packed tarball into a clean copied consumer and runs its production build.
+
+## Plain HTML
+
+The [plain HTML fixture](./fixtures/html/) imports only the public JavaScript and CSS exports, performs framework-free history navigation, and calls `refresh()`. `pnpm test:fixture:html:pack` installs the generated tarball into a clean copy, typechecks the stylesheet import, and completes a Vite production build.
 
 ## Customization
 
