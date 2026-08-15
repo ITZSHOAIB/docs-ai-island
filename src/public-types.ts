@@ -22,10 +22,30 @@ export interface DocsAiIslandPageContext {
   readonly title: string;
 }
 
+export interface DocsAiIslandContent {
+  readonly kind: "markdown" | "text";
+  readonly value: string;
+  readonly sourceUrl?: URL;
+}
+
+export interface DocsAiIslandContentReadContext {
+  readonly page: DocsAiIslandPageContext;
+  readonly signal: AbortSignal;
+}
+
+export interface DocsAiIslandContentSource {
+  read(context: DocsAiIslandContentReadContext): MaybePromise<DocsAiIslandContent>;
+}
+
+export interface DocsAiIslandClipboard {
+  writeText(value: string): Promise<void>;
+}
+
 export interface DocsAiIslandActionContext {
   readonly page: DocsAiIslandPageContext;
   readonly signal: AbortSignal;
   readonly element: HTMLElement;
+  readonly clipboard: DocsAiIslandClipboard;
   announce(message: string): void;
   close(): void;
 }
@@ -116,4 +136,10 @@ export interface DocsAiTargetOptions {
   readonly label?: string;
   readonly description?: string;
   readonly prompt?: string | ((page: DocsAiIslandPageContext) => string);
+}
+
+export interface DocsAiCopyPageOptions {
+  readonly source: DocsAiIslandContentSource;
+  readonly label?: string;
+  readonly description?: string;
 }

@@ -2,6 +2,17 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText(value: string) {
+          document.documentElement.dataset.fixtureClipboard = value;
+          return Promise.resolve();
+        },
+      },
+    });
+  });
   await page.goto("/");
 });
 
@@ -42,6 +53,30 @@ test("applies runtime appearance and theme updates", async ({ page }) => {
   const island = page.locator("[data-docs-ai-island]");
   await expect(island).toHaveAttribute("data-placement", "bottom-right");
   await expect(island).toHaveCSS("--docs-ai-island-accent", "#d25580");
+});
+
+test("copies exact configured Markdown and keeps the menu open", async ({ page }) => {
+  const island = page.locator("[data-docs-ai-island]");
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-fixture-clipboard",
+    "# Exact source\n\nKeep **formatting**.",
+  );
+  await expect(island.locator('[data-part="live-region"]')).toHaveText("Markdown copied");
+  await expect(island).toHaveAttribute("data-state", "open");
+});
+
+test("does not read page content until the reader invokes the Action", async ({ page }) => {
+  const island = page.locator("[data-docs-ai-island]");
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-content-reads", "0");
+
+  await island.getByRole("button", { name: "Ask AI" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-content-reads", "0");
+
+  await island.getByRole("button", { name: "Copy page for AI" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-fixture-content-reads", "1");
 });
 
 test("has no automatically detectable accessibility violations", async ({ page }) => {

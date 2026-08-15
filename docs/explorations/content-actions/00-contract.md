@@ -1,5 +1,7 @@
 # Phase 0: public contract
 
+Status: complete; approved 2026-08-15
+
 ## Question
 
 Where should content resolution live so multiple Actions can share it without coupling the package to a framework?
@@ -41,4 +43,4 @@ Approve these three defaults before RED:
 
 ## Exit gate
 
-The maintainer approves the contract or records requested changes. The proposed ADR can then become accepted.
+The maintainer approved all three defaults. ADR 0003 is accepted.

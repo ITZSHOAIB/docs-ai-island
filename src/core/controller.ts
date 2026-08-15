@@ -280,6 +280,13 @@ export function createController(input: DocsAiIslandConfig = {}): DocsAiIslandCo
       page,
       signal: actionAbortController.signal,
       element: root,
+      clipboard: {
+        writeText(value) {
+          const clipboard = ownerDocument.defaultView?.navigator.clipboard;
+          if (!clipboard) throw new TypeError("Clipboard is unavailable");
+          return clipboard.writeText(value);
+        },
+      },
       announce,
       close: () => close(),
     };

@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: accepted
 date: 2026-08-15
 ---
 
@@ -9,7 +9,7 @@ date: 2026-08-15
 
 `Copy page for AI` and `View as Markdown` need a machine-readable representation, but documentation frameworks expose original Markdown differently or not at all. Hardcoding a pathname convention would make the framework-neutral core unreliable. A global content service would hide Action dependencies and make multiple representations harder to compose.
 
-## Proposed decision
+## Decision
 
 Model a Content Source as a small abortable capability. Pass it explicitly to built-in Actions. A source can read content; a viewable source additionally resolves a public URL. Provide `defineContentSource()` for custom callbacks and `markdownSource()` for existing URL-backed Markdown.
 
@@ -22,7 +22,7 @@ Make copy failure explicit by default. A canonical-URL fallback is available onl
 - Guessing `pathname + ".md"` is convenient but incorrect across bases, rewrites, generators, and hosts.
 - Shipping DOM extraction now broadens scope before source fidelity and bundle cost are understood.
 
-## Consequences if accepted
+## Consequences
 
 - Action composition is slightly more verbose but capability availability is honest and type-checkable.
 - Framework recipes own URL mapping; the package owns lazy reading and lifecycle behavior.

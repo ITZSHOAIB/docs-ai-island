@@ -1,9 +1,11 @@
 import {
   chatgpt,
   claude,
+  copyPage,
   type DocsAiIslandAction,
   type DocsAiIslandAppearance,
   defineConfig,
+  defineContentSource,
   mountDocsAiIsland,
 } from "../../src/index.ts";
 import "../../src/styles/index.css";
@@ -26,17 +28,18 @@ async function copy(value: string): Promise<void> {
   await navigator.clipboard.writeText(value);
 }
 
-const copyPage: DocsAiIslandAction = {
-  id: "copy-page",
-  label: "Copy page",
-  icon: "copy",
-  closeOnSelect: false,
-  onSelect: async ({ page }) => {
-    await copy(`# ${page.title}\n\nSource: ${page.canonicalUrl.href}`);
-    showToast("Page context copied");
-    return "Page context copied";
+document.documentElement.dataset.fixtureContentReads = "0";
+const pageContent = defineContentSource({
+  read: () => {
+    document.documentElement.dataset.fixtureContentReads = String(
+      Number(document.documentElement.dataset.fixtureContentReads) + 1,
+    );
+    return {
+      kind: "markdown" as const,
+      value: "# Exact source\n\nKeep **formatting**.",
+    };
   },
-};
+});
 
 const markdown: DocsAiIslandAction = {
   id: "markdown",
@@ -69,7 +72,7 @@ const config = defineConfig({
     {
       id: "page-tools",
       kind: "utility",
-      actions: [copyPage, markdown, mcp],
+      actions: [copyPage({ source: pageContent }), markdown, mcp],
     },
   ],
   onEvent(event) {

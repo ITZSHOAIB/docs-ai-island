@@ -31,7 +31,7 @@ The exact package name returned `E404` from npm and no exact-name GitHub reposit
 | Option A vertical slice | Complete | Quiet Glass production UI, controller, defaults, customization, playground, desktop/mobile snapshots, keyboard tests, and axe coverage are present. |
 | Package validation | Complete for pilot | Publint, Are the Types Wrong ESM profile, packed-content/SSR import checks, and Brotli size budgets pass locally. |
 | Customization contract | Partial | Semantic options, messages, icons, tokens, stable parts, placements, densities, and unstyled use exist; generated reference, RTL, hostile CSS, and long-label coverage remain. |
-| Page actions and context | Partial | Canonical URL/title context, custom actions, events, and ChatGPT/Claude targets exist. The phase-level TDD exploration for copy/view/resource factories is proposed and awaiting contract approval. |
+| Page actions and context | Partial | Canonical URL/title context, custom actions, events, ChatGPT/Claude, explicit custom Content Sources, and lazy `copyPage()` exist. URL Markdown, view/resource factories, fallback, and lifecycle hardening remain. |
 | Content and route lifecycle | Partial | The VitePress recipe refreshes page context through `controller.update()` on route changes; explicit content sources, fallback experiments, visibility, and cancellation across updates remain. |
 | Framework proof | Partial | VitePress 1.6 production, browser, theme, SPA, canonical, mobile, accessibility, and packed-tarball checks pass. Plain packed HTML, Starlight/Astro, and Docusaurus fixtures remain. |
 | Documentation and release | Partial | README, PRD, plans, ADRs, contribution/security docs, and CI exist. Publishing is intentionally disabled; Vocs docs, reference docs, release approval, provenance setup, and real-site validation remain. |
@@ -539,7 +539,7 @@ Exit: every documented token/part has a test; no production CSS relies on the pr
 - Add context resolution, visibility, ChatGPT/Claude targets, clipboard Actions, resource Actions, events, validation, and privacy safeguards.
 - Keep content lazy and test target URL contracts.
 
-Current checkpoint: [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) defines the vertical RED→GREEN slices. Proposed ADR 0003 chooses explicit Content Sources composed with Actions, error-by-default copy behavior, and exact source before DOM extraction. Implementation begins only after approval.
+Current checkpoint: [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) defines the vertical RED→GREEN slices. ADR 0003 is accepted. Phase 1 implements explicit custom Content Sources and lazy `copyPage()`; subsequent phases add URL Markdown, viewing, resources, and lifecycle hardening.
 
 Exit: the package is useful with zero configuration and remains network-idle until a user acts.
 

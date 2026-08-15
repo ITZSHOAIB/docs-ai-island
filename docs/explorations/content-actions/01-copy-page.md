@@ -1,5 +1,7 @@
 # Phase 1: Copy page tracer bullet
 
+Status: complete
+
 ## User behavior
 
 A reader invokes `Copy page for AI`; the configured source resolves only then, exact Markdown reaches the clipboard, the menu stays open, and the live region identifies what was copied.
@@ -20,3 +22,7 @@ Only `navigator.clipboard` is replaced because it is a browser/system boundary. 
 ## Exit gate
 
 The public browser flow copies exact configured Markdown lazily, reports `Markdown copied`, stays open, and passes type/package/size gates.
+
+## Result
+
+Implemented through root exports `defineContentSource()` and `copyPage()`. Browser tests verify the independent Markdown literal, live feedback, open state, and zero reads during mount/menu open. The declaration test composes the capability without internal imports.

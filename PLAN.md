@@ -36,7 +36,7 @@ Publishing is intentionally disabled during development. CI validates pushes to 
 
 Canonical requirements and acceptance status live in [`docs/PRD.md`](./docs/PRD.md). Durable technical choices live in [`docs/adr/`](./docs/adr/).
 
-The next implementation epic is currently at its TDD approval checkpoint. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) splits explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and VitePress proof into six vertical phases. ADR 0003 remains proposed until the public composition and fallback rules are approved.
+The content-Action epic is active. [`docs/explorations/content-actions/`](./docs/explorations/content-actions/) splits explicit Content Sources, copy-page, Markdown viewing, generic resource Actions, lifecycle hardening, and VitePress proof into six vertical phases. ADR 0003 is accepted, and Phase 1 now ships the lazy custom-source contract plus `copyPage()` through the public entry point.
 
 ## Naming validation
 
