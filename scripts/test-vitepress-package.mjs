@@ -23,7 +23,7 @@ writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 
 execFileSync(
   "pnpm",
-  ["install", "--ignore-workspace", "--offline", "--lockfile=false", "--ignore-scripts"],
+  ["install", "--ignore-workspace", "--prefer-offline", "--lockfile=false", "--ignore-scripts"],
   {
     cwd: target,
     stdio: "inherit",
