@@ -12,7 +12,7 @@
     "docs-ai-island": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitepress": "1.6.4",
     "vue": "3.5.41"
   }
